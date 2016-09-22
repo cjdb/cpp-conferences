@@ -1,0 +1,115 @@
+Many of the concepts below are also highly simplified.
+
+We assume that there are three kinds of templates:
+template <typename T>
+template <typename T, typename U> // T and U might be the same type
+template <typename T, typename... Args>
+
+How to use the reqirements:
+template <typename T>
+    requires Regular<T>()
+class Foo;
+
+template <typename T, typename U>
+    requires Regular<T>() &&
+             Semiregular<U>()
+class Bar;
+
+template <typename T, typename... Args>
+    requires BidirectionalIterator<T>() &&
+             Regular<Args...>() &&
+             Callable<T, Args...>()
+class Fizz;
+
+Regular v1 = vector<int>{};
+Regular v2 = vector<int>{};
+RandomAccessIterator i = copy(v1.begin, v1.end, v2.begin());
+
+Concept name                     |Description
+---------------------------------|------------------------------------------------------------------
+Assignable<T, U>()               |T a, U b;
+                                 |`a = b` is possible
+---------------------------------|------------------------------------------------------------------
+Swappable<T, U>()                |T a, U b;
+                                 |`std::swap(a, b)` is possible
+                                 |http://en.cppreference.com/w/cpp/concept/Swappable
+---------------------------------|------------------------------------------------------------------
+EqualityComparable<T, U>()       |T a, U b;
+                                 |`a == b`, `a != b` is possible
+                                 |http://en.cppreference.com/w/cpp/concept/EqualityComparable
+---------------------------------|------------------------------------------------------------------
+StrictTotallyOrdered<T, U>()     |T a, U b;
+                                 |`a < b`, `a <= b`, `a >= b`, `a > b` is possible
+                                 |EqualityComparable<T, U>() must also be possible
+---------------------------------|------------------------------------------------------------------
+Destructible<T>()                |T has a destructor, or is a fundamental type
+                                 |http://en.cppreference.com/w/cpp/concept/Destructible
+---------------------------------|------------------------------------------------------------------
+Constructible<T, Args...>()      |T has a constructor that mateches with type `Args...`, or is a
+                                 |fundamental type
+---------------------------------|------------------------------------------------------------------
+DefaultConstructible<T>()        |T has a default constructor (synthesised okay, and recommended)
+                                 |http://en.cppreference.com/w/cpp/concept/DefaultConstructible
+---------------------------------|------------------------------------------------------------------
+MoveConstructible<T>()           |T has a move constructor
+                                 |http://en.cppreference.com/w/cpp/concept/MoveConstructible
+---------------------------------|------------------------------------------------------------------
+CopyConstructible<T>()           |T is MoveConstructible and Constructible<T, const T&>()
+                                 |http://en.cppreference.com/w/cpp/concept/CopyConstructible
+---------------------------------|------------------------------------------------------------------
+Movable<T>()                     |T is MoveConstructible and Assignable<T, T&&>()
+                                 |(i.e. T has a move constructor and a move assignment operator)
+                                 |http://en.cppreference.com/w/cpp/concept/MoveAssignable
+---------------------------------|------------------------------------------------------------------
+Copyable<T>()                    |MoveConstructible<T>(), CopyConstructible<T>(), and
+                                 |Assignable<T, const T&>() are possible
+                                 |http://en.cppreference.com/w/cpp/concept/CopyAssignable
+---------------------------------|------------------------------------------------------------------
+Semiregular<T>()                 |T is Copyable and DefaultConstructible
+                                 |(i.e. T implements either the rule of zero (preferred), or the
+                                 |rule of five).
+                                 |Prefer Semiregular<T>() as your base concept when Regular isn't
+                                 |possible.
+---------------------------------|------------------------------------------------------------------
+Regular<T>()                     |T is Semiregular and EqualityComparable
+                                 |Prefer Regular<T>() as your base concept
+                                 |This means that anything that is implicitly Regular is okay, but
+                                 |you need a very good reason to choose something that isn't Regular
+---------------------------------|------------------------------------------------------------------
+Callable<F, Args...>()           |F is a function, lambda, or functor, with `Args...` as its
+                                 |parameters
+                                 |http://en.cppreference.com/w/cpp/concept/Callable
+---------------------------------|------------------------------------------------------------------
+Predicate<F, Args...>            |F is Callable<F, Args...>() and F returns either bool or a type
+                                 |that can be implicitly converted to bool
+                                 |http://en.cppreference.com/w/cpp/concept/Predicate
+---------------------------------|------------------------------------------------------------------
+Relation<R, T>()                 |R is a Predicate<F, T, T>()
+---------------------------------|------------------------------------------------------------------
+Iterator<I>()                    |I i;
+                                 |`++i`, `i++`, `*i`, and `i->x` (for some x) are all possible
+                                 |I is Semiregular
+                                 |
+                                 |Hint: pointers are Iterators, not the other way around!
+                                 |http://en.cppreference.com/w/cpp/concept/Iterator
+---------------------------------|------------------------------------------------------------------
+InputIterator<I>()               |I is an input iterator
+                                 |I is an Iterator
+                                 |http://en.cppreference.com/w/cpp/concept/InputIterator
+---------------------------------|------------------------------------------------------------------
+OutputIterator<I>()              |I is an output iterator
+                                 |I is an Iterator
+                                 |http://en.cppreference.com/w/cpp/concept/OutputIterator
+---------------------------------|------------------------------------------------------------------
+ForwardIterator<I>()             |I is a forward iterator
+                                 |I is an InputIterator
+                                 |http://en.cppreference.com/w/cpp/concept/ForwardIterator
+---------------------------------|------------------------------------------------------------------
+BidirectionalIterator<I>()       |I is a bidirectional iterator
+                                 |I is a ForwardIterator
+                                 |http://en.cppreference.com/w/cpp/concept/BidirectionalIterator
+---------------------------------|------------------------------------------------------------------
+RandomAccessIterator<I>()        |I is a random access iterator
+                                 |I is a BidirectionalIterator
+                                 |http://en.cppreference.com/w/cpp/concept/RandomAccessIterator
+---------------------------------|------------------------------------------------------------------
