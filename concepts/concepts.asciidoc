@@ -12,7 +12,8 @@ as there is such little reliable literature. Below are a list of people that hav
 the notes are accurate and offer guidance where they are not.
 
 * Oswyn Brent (Haskell advice)
-* Casey Carter
+* link:http://www.cse.unsw.edu.au/~chak/[Manuel Chakravarty]
+* link:https://github.com/CaseyCarter[Casey Carter]
 * Daryl D'Souza (Java advice, first dry run)
 * link:https://sites.google.com/site/andrewnsutton/[Andrew Sutton]
 * link:http://cubbi.com/[Sergey Zubkov]
@@ -795,9 +796,11 @@ the library developer's part (read our part). To fix this issue, we'll need to c
 ------------
 // code up until std::ostream& operator<<(std::ostream&, const Big_int&); here
 
-template <Arithmetic T, Arithmetic U>
+template <typename T, typename U>
 concept bool Arithmetic() {
-   return ranges::Common<T, U>() &&
+   return ranges::Arithmetic<T>() &&
+          ranges::Arithmetic<U>() &&
+          ranges::Common<T, U>() &&
           ranges::StrictTotallyOrdered<T, U>() &&
           ranges::Assignable<T, U>() &&
           requires(T t, U u) {
