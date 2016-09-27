@@ -15,6 +15,7 @@ the notes are accurate and offer guidance where they are not.
 * link:http://www.cse.unsw.edu.au/~chak/[Manuel Chakravarty]
 * link:https://github.com/CaseyCarter[Casey Carter]
 * Daryl D'Souza (Java advice, first dry run)
+* link:https://www.linkedin.com/in/margret-steele-2aa6019b?authType=NAME_SEARCH&authToken=LfTa&locale=en_US&trk=tyah&trkInfo=clickedVertical%3Amynetwork%2CclickedEntityId%3A356827234%2CauthType%3ANAME_SEARCH%2Cidx%3A1-1-1%2CtarId%3A1475018789377%2Ctas%3Amargret[Margret Steele]
 * link:https://sites.google.com/site/andrewnsutton/[Andrew Sutton]
 * link:http://cubbi.com/[Sergey Zubkov]
 
@@ -465,8 +466,10 @@ doesn't meet the requirements for `sort`. There are actually a few errors here:
 
 === Concepts in place of `auto`
 Anyone that speaks with me, or reads code that I've written, knows that I am a huge advocate for
-Sutter's link:[Almost Always Auto]. We'll be switching out `auto` in place of concepts to make sure
-that we get the correct type. `auto`, while great, becomes the weakest concept, somewhat resembling
+Sutter's link:[Almost Always Auto]. There also appears to be an _Almost Always Against Auto_ camp as
+well. We'll be switching out `auto` in place of concepts to make sure that we get the correct type:
+we keep the type deduction (which AAA fans like), but force some checks to make sure that not just
+any old type is being used. `auto`, while great, becomes the weakest concept, somewhat resembling
 a "constraints not necessary" mentality. Wherever possible, we should be more restrictive to ensure
 that the correct type is met.
 
