@@ -5,7 +5,9 @@
 
 namespace ranges = std::experimental::ranges::v1;
 
-template <ranges::InputIterator I>
+template <typename I>
+requires
+   ranges::InputIterator<I>()
 std::vector<double> make_vector(I first, I last)
 {
    auto v = std::vector<double>{};

@@ -5,7 +5,10 @@
 
 namespace ranges = std::experimental::ranges::v1;
 
-template <ranges::InputIterator I, ranges::Sentinel<I> S>
+template <typename I, typename S>
+requires
+   ranges::InputIterator<I>() &&
+   ranges::Sentinel<I, S>()
 std::vector<double> make_vector(I first, S last)
 {
    auto v = std::vector<double>{};
