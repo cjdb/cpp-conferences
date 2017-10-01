@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="en">
+
+   <head>
+      <meta charset="utf-8">
+
+      <title>Applied Modern C++: Exploring the Standard Library -- Iterators, sentinels, and ranges</title>
+
+      <meta name="description" content="Discusses iterators, sentinels, and ranges">
+      <meta name="author" content="Christopher Di Bella">
+
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+      <link rel="stylesheet" href="../../reveal.js/css/reveal.css">
+      <link rel="stylesheet" href="../../reveal.js/css/theme/black.css" id="theme">
+
+      <!-- Theme used for syntax highlighting of code -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="../../reveal.js/lib/css/darcula.css">
+
+      <!-- Printing and PDF exports -->
+      <script>
+         var link = document.createElement( 'link' );
+         link.rel = 'stylesheet';
+         link.type = '../../reveal.js/text/css';
+         link.href = window.location.search.match( /print-pdf/gi ) ? '../../reveal.js/css/print/pdf.css' : '../../reveal.js/css/print/paper.css';
+         document.getElementsByTagName( 'head' )[0].appendChild( link );
+      </script>
+
+      <!--[if lt IE 9]>
+      <script src="lib/js/html5shiv.js"></script>
+      <![endif]-->
+   </head>
+
+   <body>
+
+      <div class="reveal">
+         <div class="slides">
+            <section data-background="images/background.png">
+               <img class="cppcon-brand plain" src="images/cppcon-brand.png" />
+               <div class="title">
+                  <h1>Applied Modern C++:</h1>
+                  <h2>Exploring the Standard Library</h2>
+                  <h3>Iterators, sentinels, and ranges</h3>
+                  <h4>Christopher Di Bella</h4>
+                  <h4>Runtime Technology Engineer for</h4><img class="codeplay-brand plain" src="images/codeplay.png" />
+               </div>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Goals</h2>
+                  <h3>In this section, you will learn about</h3>
+                  <ul>
+                     <li>readability, writability</li>
+                     <li class="fragment">iterators, sentinels, and ranges</li>
+                     <li class="fragment">iterator helper functions</li>
+                     <li class="fragment">iterator traits</li>
+                     <li class="fragment">iterator adaptors</li>
+                  </ul>
+               </section>
+
+               <section>
+                  <h2>Outcomes</h2>
+                  <span class="content">
+                  <h3>After this setion, you will be able to</h3>
+                  <ul>
+                     <li>choose appropriate iterator concepts and tags for algorithms</li>
+                     <li>choose appropriate iterator adaptors</li>
+                     <li>use the Ranges TS to specialise generic algorithms</li>
+                     <li>understand some mathematics behind the Standard Library</li>
+                  </ul>
+                  </span>
+               </section>
+            </section>
+
+            <section>
+               <h2>What is an iterator?</h2>
+               <ul>
+                  <li>A generalisation of pointers</li>
+                  <li>Abstracts different address representations</li>
+               </ul>
+            </section>
+
+            <section>
+               <h2>Readability</h2>
+               <span class="content">
+                  <ul>
+                     <li>Fundamental property of iterators and references</li>
+                     <li>There exists a regular function</li>
+                  </ul>
+               </span>
+               <pre><code class="cpp">const value_type_t&lt;I&gt;& source(const I&);</code></pre>
+               <span class="content fragment">
+                  <ul>
+                     <li>This is commonly <code class="cpp">I::operator*() const</code></li>
+                     <li>Validity must be checked by the runtime</li>
+                  </ul>
+               </span>
+            </section>
+
+            <section>
+               <h2>Kinds of iterator</h2>
+               <ul>
+                  <li>Input iterator</li>
+                  <li>Forward iterator</li>
+                  <li>Bidirectional iterator</li>
+                  <li>Random access iterator</li>
+                  <li>Output iterator</li>
+               </ul>
+            </section>
+
+            <section>
+               <h2>Iterator properties</h2>
+               <ul class="content">
+                  <li><code class="cpp">Regular</code></li>
+                  <li>Has <i>some</i> concept of distance</li>
+                  <li>Has <i>some</i> concept of a successor
+                     <ul class="fragment"><li><code class="cpp">operator++()</code></li></ul>
+                  </li>
+               </ul>
+            </section>
+
+            <section>
+               <h2>Sentinels</h2>
+               <ul>
+                  <li>Denote the end of a <span class="fragment highlight-red">range</span></li>
+                  <li>C++98 -- C++17 assume the same type as an iterator</li>
+                  <li>Ranges TS does not</li>
+               </ul>
+            </section>
+
+            <section>
+               <h2>What is a range?</h2>
+               <ul>
+                  <li>An iterator <code class="fragment highlight-green">i</code> that is delimited by a sentinel
+                     <code class="fragment highlight-red">s</code></li>
+                  <li>Counted ranges</li>
+                  <li>Bounded ranges</li>
+               </ul>
+<pre><code class="cpp">while (i != s) {
+   // ...
+   ++i;
+}
+</code></pre>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Representing a range</h2>
+                  <ul>
+                     <li>Half-open ranges: <code class="cpp" style="font-size: 0.85em;">[i, s)</code></li>
+                     <li>Closed ranges: <code class="cpp" style="font-size: 0.85em;">[i, s - i]</code></li>
+                     <li><code class="cpp" style="font-size: 0.85em;">[i, i)</code> is the empty range</li>
+                  </ul>
+               </section>
+
+               <section>
+                  <h2>Reachability</h2>
+                  <code class="cpp">a</code> &#8712; <code class="cpp">[i, s)</code> if, and only if, <code class="cpp">[i, a)</code> and <code class="cpp">[a, s)</code> are bounded
+               </section>
+            </section>
+
+            <section>
+               <h2>Input iterators</h2>
+               <ul>
+                  <li>Single-pass iterators</li>
+                  <li><code class="cpp">Readable</code></li>
+                  <li>Succession not regular</li>
+                  <li><code class="cpp" style="font-size: 0.85em;">i == j</code> doesn't imply <code class="cpp" style="font-size: 0.85em;">++i == ++j</code></li>
+                  <li><code class="cpp" style="font-size: 0.85em;">i++ == j++</code> doesn't imply <code class="cpp" style="font-size: 0.85em;">i == j</code></li>
+               </ul>
+<pre><code class="cpp">for (ranges::InputIterator i = ranges::istream_iterator&lt;int&gt;{cin};
+   i != decltype(i){}; ++i) {
+   std::cout &lt;&lt; *i &lt;&lt; '\n';
+}
+</code></pre>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Forward iterators</h2>
+                  <span class="content">
+                     <ul>
+                        <li>Multi-pass input iterator</li>
+                        <li>Succession regular</li>
+                        <li><code class="cpp">i == j</code> implies <code class="cpp">++i == ++j</code></li>
+                        <li><code class="cpp">i++ == j++</code> implies <code class="cpp">i == j</code></li>
+                     </ul>
+                  </span>
+<pre><code class="cpp">ranges::ForwardRange r = std::forward_list{1, 2, 3, 4, 5};
+ranges::SignedIntegral distance = 0;
+const ranges::ForwardIterator i = ranges::find(r, 3);
+for (ranges::ForwardIterator j = i; j != ranges::cend(r); ++j)
+   ++distance;
+if (distance > 0)
+   std::cout &lt;&lt; "There are " &lt;&lt; distance &lt;&lt; " elements from " &lt;&lt; *i &lt;&lt; " to the end.\n";
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Reasons for forward iterators</h2>
+                  <span class="content">
+                     <ul class="fragments">
+                        <li>Meaningful searches</li>
+                        <li>Finding a partition point</li>
+                        <li>Permutation detection</li>
+                        <li>Rotating ranges</li>
+                        <li>Writing to a range that will later be read</li>
+                     </ul>
+                  </span>
+               </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Bidirectional iterators</h2>
+                  <span class="content">
+                     <ul>
+                        <li>Forward iterators that can also move backward</li>
+                        <li><code class="cpp">a == b</code> implies <code class="cpp">a-- == b</code></li>
+                        <li><code class="cpp">a--, --b</code> implies <code class="cpp">a == b</code></li>
+                     </ul>
+                  </span>
+                  <pre>
+<code class="cpp">using ranges::BidirectionalIterator, ranges::SignedIntegral;
+ranges::BidirectionalRange r = std::list{1, 2, 3, 4, 5};
+SignedIntegral distance = 0;
+const BidirectionalIterator i = ranges::find(r, 3);
+for (BidirectionalIterator j = i; j != ranges::cbegin(r); --i)
+   --distance;
+std::cout &lt;&lt; "There are " &lt;&lt; distance &lt;&lt; " elements from " &lt;&lt; *i &lt;&lt; " to the beginning\n";
+</code></pre>
+               </section>
+
+            <section>
+               <h2>Reasons for bidirectional iterators</h2>
+               <ul>
+                  <li>Reverse algorithms</li>
+                  <li>Backward algorithms</li>
+                  <li>Partition algorithms</li>
+               </ul>
+            </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Random-access iterators</h2>
+                  <span class="content">
+                     <ul>
+                        <li>Bidirectional iterators that are also indexed</li>
+                        <li>Arbitrary succession and reverse succession takes constant time</li>
+                        <li>Are <code class="cpp">StrictTotallyOrdered</code></li>
+                        <li><code class="cpp">i &lt; j</code> means "<code class="cpp">i</code> comes before <code class="cpp">j</code>"</li>
+                     </ul>
+                  </span>
+                  <pre><code class="cpp">ranges::RandomAccessRange r = std::vector{1, 2, 3, 4, 5};
+{
+   const ranges::RandomAccessIterator i = ranges::cbegin(r) + 2;
+   const ranges::RandomAccessIterator j = ranges::cend(r) - 2;
+   std::cout &lt;&lt; std::boolalpha &lt;&lt; (i &lt; j) &lt;&lt; '\n'
+      &lt;&lt; (j &gt; i) &lt;&lt; '\n' &lt;&lt; std::boolalpha;
+}
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Reasons for random-access iterators</h2>
+                  <ul>
+                     <li>Sorting algorithms</li>
+                     <li>Heap algorithms</li>
+                     <li>Randomising algorithms (e.g. shuffling)</li>
+                  </ul>
+               </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Writability</h2>
+                  There exists a non-regular unary function
+                  <pre><code class="cpp">value_type_t&lt;O&gt;&amp; sink(O&amp;);</code></pre>
+                  <ul class="fragment">
+                     <li>Typically <code class="cpp" style="font-size: 0.85em;">O::operator*()</code></li>
+                     <li>Calling <code class="cpp">sink</code> is non-repeatable</li>
+                     <li>Validity needs to be checked at runtim</li>
+                  </ul>
+               </section>
+
+               <section>
+                  <h2>Output iterators</h2>
+                  <ul>
+                     <li>Single-pass <code class="cpp">Writable</code> iterators</li>
+                     <li>Not necessarily <code class="cpp">EqualityComparable</code></li>
+                     <li>Succession not regular</li>
+                  </ul>
+<pre><code class="cpp">ranges::OutputIterator o = ranges::ostream_iterator&lt;std::cout&gt;{std::cout, "\n"};
+for (const auto&amp; i : r)
+   *o++ = i;
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Reasons for output iterators</h2>
+                  <span class="fragment">
+                     <p>Any algorithm that performs a write</p>
+<pre><code class="cpp">namespace std::experimental::ranges { inline namespace v1 {
+   template &lt;class T, OutputIterator&lt;const T&amp;&gt; O, Sentinel&lt;O&gt; S&gt;
+   O fill(O first, S last, const T&amp; value)
+   {
+      while (first != last)
+         *first++ = value;
+   }
+}}
+</code></pre>
+                  </span>
+               </section>
+            </section>
+
+            <section>
+               <h2>Mutability</h2>
+               <ul>
+                  <li>A <code class="cpp">ForwardIterator</code> that is also <code class="cpp">Writable</code></li>
+                  <li>Mutable iterators have repeatable sinks</li>
+               </ul>
+               <span class="fragment">
+                  <h2>Reasons for mutability</h2>
+                  <ul>
+                     <li>Transformations</li>
+                  </ul>
+               </span>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Iterator validity</h2>
+                  <ul>
+                     <li>Similar to references</li>
+                     <li>Iterators not associated with a range</li>
+                     <li>Neither readable nor writable</li>
+                  </ul>
+               </section>
+
+               <section>
+                  <h2>Iterator validity</h2>
+<pre><code class="cpp">ranges::BidirectionalRange r = std::list{1, 2, 3, 4, 5}; // or set, map, ...
+ranges::SignedIntegral distance = 0;
+const ranges::BidirectionalIterator i = ranges::find(r, 3);
+for (ranges::BidirectionalIterator j = i; j != ranges::cbegin(r); --j)
+   --distance;
+if (distance &lt;= 0)              // invalid iterator read here ~~~v
+   std::cout &lt;&lt; "There are " &lt;&lt; distance &lt;&lt; " elements from " &lt;&lt; *i &lt;&lt; " to the beginning.\n";
+</code></pre>
+<pre><code class="cpp">ranges::BidirectionalRange r = std::list{1, 2, 3, 4, 5}; // or set, map, ...
+if (const ranges::BidirectionalIterator i = ranges::find(r, 3); i != cend(r)) {
+   ranges::SignedIntegral distance = 0;
+   for (ranges::BidirectionalIterator j = i; j != ranges::cbegin(r); --j)
+      --distance;
+   if (distance &lt;= 0)
+      std::cout &lt;&lt; "There are " &lt;&lt; distance &lt;&lt; " elements from " &lt;&lt; *i &lt;&lt; " to the beginning.\n";
+}
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Iterator invalidation for Standard containers</h2>
+                  <ul>
+                     <li>For all containers: same as reference invalidation</li>
+                     <li>Past-the-end iterator can be invalidated</li>
+                     <li>Assignment always invalidates iterators for the LHS</li>
+                  </ul>
+<pre><code class="cpp">Regular v1 = std::vector&lt;int&gt;{1, 2, 3};
+Regular v2 = std::vector&lt;int&gt;{4, 5, 6};
+const RandomAccessIterator i1 = ranges::begin(v1);
+const RandomAccessIterator i2 = ranges::begin(v2);
+v1 = v2; // invalidates i1 only
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Extra for associative containers</h2>
+                  <code class="cpp">extract</code> also invalidates removed iterator
+               </section>
+
+               <section>
+                  <h2>Extras for unordered associative containers</h2>
+                  <ul>
+                     <li>insertion/emplacement when container rehashes</li>
+                     <li><code class="cpp">rehash</code> and <code class="cpp">reserve</code> always invalidate</li>
+                  </ul>
+               </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Range accessors</h2>
+                  <ul>
+                     <li>Generalised versions of
+                        <ul style="font-size: 0.8em;">
+                           <li><code class="cpp">begin, end, cbegin, cend</code></li>
+                           <li><code class="cpp">rbegin, rend, crbegin, crend</code></li>
+                           <li><code class="cpp">size, empty</code></li>
+                           <li><code class="cpp">data, cdata</code></li>
+                        </ul>
+                     </li>
+                     <li>Preferred over explicitly using members</li>
+                     <li>Match <code class="cpp">std</code> with Standard functions</li>
+                     <li>Match <code class="cpp">ranges</code> with Ranges functions</li>
+                  </ul>
+               </section>
+
+               <section>
+                  <h2>What's wrong with this code?</h2>
+<pre><code class="cpp">template &lt;ForwardRange Rng&gt;
+void print(const Rng&amp; r)
+{
+   ranges::copy(r.cbegin(), r.cend(),
+      ranges::ostream_iterator&lt;value_type_t&lt;Rng&gt;&gt;{std::cout, "\n"});
+}
+
+int main()
+{
+   int i[] = {1, 2, 3, 4};
+   print(i);
+}
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>This code is better</h2>
+<pre><code class="cpp">template &lt;ForwardRange Rng&gt;
+void print(const Rng&amp; r)
+{
+   ranges::copy(ranges::cbegin(r), ranges::cend(r),
+      ranges::ostream_iterator&lt;value_type_t&lt;Rng&gt;&gt;{std::cout, "\n"});
+}
+
+int main()
+{
+   int i[] = {1, 2, 3, 4};
+   print(i);
+}
+</code></pre>
+               </section>
+               <section>
+                  <h2><code class="cpp">next</code>, <code class="cpp">prev</code></h2>
+                  <ul>
+                     <li>Can't index <code class="cpp">ForwardIterator</code> or <code class="cpp">BidirectionalIterator</code></li>
+                  </ul>
+<pre><code class="cpp">Regular l = std::list{1, 2, 3, 4, 5, 6};
+std::cout &lt;&lt; *ranges::next(ranges::cbegin(l), 2) &lt;&lt; '\n'
+   &lt;&lt; *ranges::prev(ranges::cend(l), 3) &lt;&lt; '\n';
+</code></pre>
+                  <ul class="fragment">
+                     <li>What happens when <code class="cpp">begin(rng) == end(rng)</code>?</li>
+                  </ul>
+               </section>
+
+               <section>
+                  <h2><code class="cpp">advance</code></h2>
+
+                  <p>Might not want the copy from <code class="cpp">next</code>/<code class="cpp">prev</code></p>
+<pre><code class="cpp">ranges::InputIterator i = ranges::istream_iterator&lt;int&gt;{std::cin};
+ranges::advance(i, 3);
+</code></pre>
+               </section>
+
+               <section data-transition="fade">
+                  <h2><code class="cpp">distance</code></h2>
+                  <p>Gets the distance of a range</p>
+<pre><code class="cpp">Regular rng = std::vector{1.0, 2.0, 3.0, 4.0};
+
+std::distance(std::cbegin(rng), std::cend(rng)); // or ranges::
+</code></pre>
+                  <p class="fragment">What happens when you call this?</p>
+<pre class="fragment"><code class="cpp">std::distance(std::cend(rng), std::cbegin(rng))</code></pre>
+               </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Iterator traits</h2>
+<pre><code class="cpp">template &lt;typename I&gt;
+void advance_helper(I&amp; i, typename iterator_traits&lt;I&gt;::difference_type n,
+   std::random_access_iterator_tag) {
+   i += n;
+}
+</code></pre>
+<pre><code class="cpp">template &lt;typename I&gt;
+void advance_helper(I&amp; i, typename iterator_traits&lt;I&gt;::difference_type n,
+   std::bidirectional_iterator_tag) {
+   if (n &lt; 0)
+      while (n++)
+         --i;
+   else if (0 &lt; n)
+      while (n--)
+         ++i;
+}
+</code></pre>
+<pre><code class="cpp">template &lt;typename I&gt;
+void advance(I&amp; i, typename std::iterator_traits&lt;I&gt;::difference_type n) {
+   advance_helper(i, n, std::iterator_traits&lt;I&gt;::category{});
+}
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Ranges TS iterator traits</h2>
+<pre><code class="cpp">template &lt;ranges::RandomAccessIterator I&gt;
+void advance_helper(I&amp; i, ranges::difference_type_t&lt;I&gt; n)
+{
+   i += n;
+}
+
+template &lt;ranges::InputIterator I&gt;
+void advance_helper(I&amp; i, ranges::difference_type_t&lt;I&gt; n)
+{
+   if (n &lt; 0)
+      while (n++)
+         --i;
+   else if (0 &lt; n)
+      while (n--)
+         ++i;
+}
+</code></pre>
+               </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Reverse iterators</h2>
+                  <ul>
+                     <li>Iterator adaptor on a <code class="cpp">BidirectionalIterator</code></li>
+                     <li>Traverses the range <code class="cpp">[predecessor(l), f] instead of [f, l)</code></li>
+                  </ul>
+<pre><code class="cpp">template &lt;typename T&gt;
+class My_vector {
+   template &lt;typename T&gt;
+   class Iterator;
+public:
+   using iterator = Iterator&lt;T&gt;;
+   using const_iterator = Iterator&lt;const T&gt;;
+   using reverse_iterator = std::reverse_iterator&lt;iterator&gt; // or ranges::
+   using const_reverse_iterator = std::reverse_iterator&lt;const_reverse_iterator&gt;;
+   // ...
+};
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Why reverse iterators are important</h2>
+<pre><code class="cpp">template &lt;BidirectionalRange Rng&gt;
+safe_iterator_t&lt;Rng&gt; find_last(Rng&amp;&amp; rng, const value_type_t&lt;Rng&gt;&amp; val) noexcept
+{
+   for (auto i = ranges::cend(rng); i != ranges::cbegin(rng);)
+      if (*--i == val)
+         return i;
+   return ranges::cend(rng);
+}
+</code></pre>
+
+<pre class="fragment"><code class="cpp">template &lt;BidirectionalRange Rng&gt;
+safe_iterator_t&lt;Rng&gt; find_last(Rng&amp;&amp; rng, const value_type_t&lt;Rng&gt;&amp; val) noexcept
+{
+   auto i = ranges::find(ranges::crbegin(rng), ranges::crend(rng), val);
+   if (i == ranges::crend(rng))
+      return ranges::cend(rng);
+   return ranges::prev(i.base());
+}</code></pre>
+               </section>
+
+               <section>
+                  <h2>Making a reverse iterator</h2>
+<pre><code class="cpp">Regular v = std::vector{1, 2, 3, 4, 5};
+std::make_reverse_iterator(std::begin(v));
+ranges::make_reverse_iterator(ranges::begin(v));
+</code></pre>
+               </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Insert iterators -- motivation</h2>
+<pre><code class="cpp">namespace std::experimental::ranges { inline namespace v1 {
+   template &lt;InputIterator I, Sentinel&lt;I&gt; S, WeaklyIncrementable O&gt;
+   requires
+      IndirectlyCopyable&lt;I, O&gt;
+   tagged_pair&lt;tag(I), tag(O)&gt; copy(I first, S last, O result)
+   {
+      while (first != last)
+         *first++ = *last++;
+      return {first, result};
+   }
+}} // namespace std::experimental::ranges::v1
+// ...
+
+Regular rng1 = std::vector{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; // size 10
+Regular rng2 = std::vector{11, 12, 13, 14, 15}; // size 5
+
+<span class="fragment highlight-red" data-fragment-index="1"><span class="fragment fade-out"  data-fragment-index="2">ranges::copy(ranges::cbegin(rng1), ranges::cend(rng1), ranges::end(rng2));</span></span>
+<span class="fragment highlight-green" data-fragment-index="1"><span class="fragment fade-in" data-fragment-index="2">ranges::copy(ranges::cbegin(rng1), ranges::cend(rng1), ranges::back_inserter(rng2));</span></span>
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Insert iterators</h2>
+                  <ul>
+                     <li>Strictly output iterators</li>
+                     <li><code style="font-size: 0.8em;">back_inserter</code> does <code style="font-size: 0.8em;">push_back</code></li>
+                     <li><code style="font-size: 0.8em;">front_inserter</code> does <code style="font-size: 0.8em;">push_front</code></li>
+                     <li><code style="font-size: 0.8em;">inserter</code> does <code style="font-size: 0.8em;">insert</code></li>
+                  </ul>
+               </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2><code class="cpp">ostream_iterator</code></h2>
+<pre class="fragment"><code class="cpp">std::ostream&amp; operator&lt;&lt;(std::ostream&amp; o, const std::vector&lt;double&gt;&amp; v)
+{
+   ranges::copy(rng, ranges::ostream_iterator&lt;int&gt;{std::cout});
+   std::cout &lt;&lt; '\n';
+   return o;
+}
+
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; o, const std::vector&lt;int&gt;&amp; v)
+{
+   std::copy(std::cbegin(v), std::cend(v) - 1, std::ostream_iterator&lt;int&gt;{cout, ", "});
+   cout &lt;&lt; v.back() &lt;&lt; '\n';
+   return o;
+}
+
+// Possible output:
+// 1.52.53.54.5.6
+// 1, 2, 3, 4, 5
+</code></pre>
+               </section>
+
+               <section>
+                  <h2><code class="cpp">istream_iterator</code></h2>
+<pre class="fragment" data-fragment-index="1"><code class="cpp"><span class="fragment fade-out" data-fragment-index="2">// bad
+auto v = vector<int>{};
+// ... something can happen here?
+cin >> v; // need to define operator>></span>
+<span class="fragment" data-fragment-index="2">auto v = std::vector(istream_iterator&lt;int&gt;{cin}, istream_iterator&lt;int&gt;{});</span>
+</code></pre>
+               </section>
+
+               <section>
+                  <h2><code class="cpp">istreambuf_iterator</code></h2>
+<pre><code class="cpp">// example adapted from http://en.cppreference.com/w/cpp/iterator/istreambuf_iterator
+std::istringstream s("123");
+std::istreambuf_iterator&lt;char&gt; i1(s), i2(s);
+std::cout &lt;&lt; "i1 returns " &lt;&lt; *i1 &lt;&lt; '\n'
+   &lt;&lt; "i2 returns " &lt;&lt; *i2 &lt;&lt; '\n';
+</code></pre>
+<pre class="fragment"><code class="cpp">i1 returns 1
+i2 returns 1
+</code></pre>
+<pre class="fragment"><code class="cpp">++i1;
+std::cout &lt;&lt; "i1 returns " &lt;&lt; *i1 &lt;&lt; '\n'
+   &lt;&lt; "i2 returns " &lt;&lt; *i2 &lt;&lt; '\n';
+</code></pre>
+<pre class="fragment"><code class="cpp">i1 returns 2
+i2 returns 1
+</code></pre>
+<pre class="fragment"><code class="cpp">++i2;
+std::cout &lt;&lt; "i1 returns " &lt;&lt; *i1 &lt;&lt; '\n'
+   &lt;&lt; "i2 returns " &lt;&lt; *i2 &lt;&lt; '\n';</code></pre>
+</code></pre>
+<pre class="fragment"><code class="cpp">i1 returns 2
+i2 returns 3
+</code></pre>
+               </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Move iterators</h2>
+<pre><code class="cpp">Regular v1 = std::vector&lt;std::string&gt;{/* ... */};
+Regular v2 = std::vector(v1.begin(), v1.end()); // copy
+Regular v3 = [&amp;v1]{                             // move?
+   <span class="fragment">Regular v = std::vector&lt;std::string&gt;(v1.size());
+   ranges::transform(v1, v.begin(), [](Regular&amp; s) { return std::move(s); });
+   return v;</span>
+}();
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Move iterators</h2>
+<pre><code class="cpp"><span class="fragment fade-out" data-fragment-index="1">Regular v3 = std::vector(std::make_move_iterator(v1.begin()),
+   std::make_move_iterator(v1.end()));</span>
+<span class="fragment fade-in" data-fragment-index="1">std::sort(std::make_move_iterator(v1.begin()), std::make_move_iterator(v1.end()));</span>
+</code></pre>
+               </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Ranges TS-only iterators</h2>
+               </section>
+
+               <section>
+                  <h2><code class="cpp">move_iterator</code> and <code class="cpp">move_sentinel</code></h2>
+<pre><code class="cpp">template &lt;InputIterator I, Sentinel&lt;I&gt; S, WeaklyIncrementable O, IndirectPredicate&lt;I&gt; Pred&gt;
+requires
+   IndirectlyMovable&lt;I, O&gt;
+tagged_pair&lt;tag::in(I), tag::out(O)&gt; move_if(I first, S last, O out, Pred pred)
+{
+   return ranges::copy_if(move_iterator&lt;I&gt;{first}, move_sentinel&lt;S&gt;{last}, out, pred);
+}
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Counting algorithms</h2>
+                  <ul style="font-size: 0.9em;">
+                     <li><code class="cpp">copy_n</code></li>
+                     <li><code class="cpp">fill_n</code></li>
+                     <li><code class="cpp">generate_n</code></li>
+                     <li><code class="cpp">search_n</code></li>
+                     <li><code class="cpp">move_n</code></li>
+                     <li><code class="cpp">for_each_n</code> (C++17 only)</li>
+                  </ul>
+               </section>
+
+               <section>
+<pre><code class="cpp">Regular v = []{
+   Regular v = std::vector(1'000, 0);
+   std::iota(std::begin(v), std::end(v), 0);
+   return v;
+}();
+
+std::cout &lt;&lt; std::accumulate(std::begin(v), std::begin(v) + 100) &lt;&lt; '\n';
+</code></pre>
+               </section>
+
+               <section>
+                  <h2><code class="cpp">counted_iterator</code></h2>
+<pre><code class="cpp">Regular v = []{
+   Regular v = std::vector(1'000, 0);
+   std::iota(std::begin(v), std::end(v), 0);
+   return v;
+}();
+
+std::cout &lt;&lt; std::accumulate(<span class="fragment highlight-green">ranges::make_counted_iterator(ranges::begin(v), 100)</span>,
+   <span class="fragment highlight-red">ranges::default_sentinel{}</span>) &lt;&lt; '\n';
+</code></pre>
+               </section>
+
+               <section>
+                  <h2><code class="cpp">common_iterator</code></h2>
+<pre><code class="cpp">Regular v = []{
+   Regular v = std::vector(1'000, 0);
+   std::iota(std::begin(v), std::end(v), 0);
+   return v;
+}();
+
+template &lt;typename T&gt;
+using counted_iterator_t = ranges::common_iterator&lt;ranges::counted_iterator&lt;T&gt;,
+   ranges::default_sentinel&gt;;
+// ...
+std::cout &lt;&lt; std::accumulate(
+      counted_iterator_t(ranges::make_counted_iterator(ranges::begin(v), 100)),
+      counted_iterator_t(ranges::default_sentinel{}))
+   &lt;&lt; '\n';
+</code></pre>
+               </section>
+            </section>
+         </div>
+
+      </div>
+
+      <script src="../../reveal.js/lib/js/head.min.js"></script>
+      <script src="../../reveal.js/js/reveal.js"></script>
+
+      <script>
+
+         // More info https://github.com/hakimel/reveal.js#configuration
+         Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            // More info https://github.com/hakimel/reveal.js#dependencies
+            dependencies: [
+               { src: '../../reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+               { src: '../../reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+               { src: '../../reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+               { src: '../../reveal.js/plugin/highlight/highlight.pack.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+               { src: '../../reveal.js/plugin/zoom-js/zoom.js', async: true },
+               { src: '../../reveal.js/plugin/notes/notes.js', async: true }
+            ]
+         });
+
+      </script>
+
+   </body>
+</html>

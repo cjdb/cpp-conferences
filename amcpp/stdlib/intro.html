@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+
+   <head>
+      <meta charset="utf-8">
+
+      <title>Applied Modern C++: Exploring the Standard Library -- Introduction</title>
+
+      <meta name="description" content="Introduces the course">
+      <meta name="author" content="Christopher Di Bella">
+
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+      <link rel="stylesheet" href="../../reveal.js/css/reveal.css">
+      <link rel="stylesheet" href="../../reveal.js/css/theme/black.css" id="theme">
+
+      <!-- Theme used for syntax highlighting of code -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="../../reveal.js/lib/css/darcula.css">
+
+      <!-- Printing and PDF exports -->
+      <script>
+         var link = document.createElement( 'link' );
+         link.rel = 'stylesheet';
+         link.type = '../../reveal.js/text/css';
+         link.href = window.location.search.match( /print-pdf/gi ) ? '../../reveal.js/css/print/pdf.css' : '../../reveal.js/css/print/paper.css';
+         document.getElementsByTagName( 'head' )[0].appendChild( link );
+      </script>
+
+      <!--[if lt IE 9]>
+      <script src="lib/js/html5shiv.js"></script>
+      <![endif]-->
+   </head>
+
+   <body>
+
+      <div class="reveal">
+         <!-- Any section element inside of this container is displayed as a slide -->
+         <div class="slides">
+            <section data-background="images/background.png">
+               <img class="cppcon-brand plain" src="images/cppcon-brand.png" />
+               <div class="title">
+                  <h1>Applied Modern C++:</h1>
+                  <h2>Exploring the Standard Library</h2>
+                  <h3>Introduction</h3>
+                  <h4>Christopher Di Bella</h4>
+                  <h4>Runtime Technology Engineer for</h4><img class="codeplay-brand plain" src="images/codeplay.png" />
+               </div>
+            </section>
+            <section>
+               <h2>Me</h2>
+               <section class="brand">
+                  <p><i href="#" class="fa fa-twitter"></i> @cjdb_ns</p>
+                  <p><i href="#" class="fa fa-google"></i> cjdb.ns@gmail.com</p>
+                  <p><i href="#" class="fa fa-github"></i> https://github.com/cjdb</p>
+                  <p><i href="#" class="fa fa-github"></i> https://github.com/appliedmoderncpp</p>
+                  <p><i href="#" class="fa fa-youtube"></i> Applied Modern C++</p>
+               </section>
+            </section>
+
+            <section>
+               <h2>Course description</h2>
+               <ul>
+                  <li>A two-day course</li>
+                  <li>Details iconic parts of the Standard Library</li>
+                  <li>We will be using C++17 and the Ranges TS</li>
+                  <li>Most code will be C++11-compatible or portable</li>
+               </ul>
+            </section>
+
+            <!-- Example of nested vertical slides -->
+            <section>
+               <h1>Course aims</h1>
+               <section class="content">
+                  <h3>This course aims to</h3>
+                  <ul>
+                     <li><b>introduce</b> the salient features of the C++ Standard Library</li>
+                     <li><b>demonstrate</b> why the Standard Library is preferred</li>
+                     <li><b>introduce</b> the Ranges TS</li>
+                     <li><b>demonstrate</b> why adopting the Ranges TS <i>right now</i> is a great idea</li>
+                  </ul>
+               </section>
+            </section>
+
+            <section data-background="images/australia.png"></section>
+            <section>
+               <img class="plain" src="images/nasdaq.png" />
+               <img class="unsw-brand plain" src="images/unsw.png" />
+            </section>
+            <section data-background="images/uk.png"></section>
+            <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+               <img class="codeplay-brand-large plain" src="images/codeplay.png" />
+            </section>
+
+            <section>
+               <img class="snowboard plain" src="images/snowboarding.jpg"/>
+               <img class="film plain" src="images/film.jpg"/>
+               <img class="sue plain" src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Sues_skeleton.jpg"/>
+               <img class="star-wars plain" src="images/star-wars.png" />
+            </section>
+
+            <section>
+               <h2>Course structure (Day 1)</h2>
+               <section class="content">
+                  <ol>
+                     <li>Basics</li>
+                     <li>String manipulation</li>
+                     <li>Containers</li>
+                     <li>Input and output</li>
+                     <li>Iterators,&nbsp;sentinels,&nbsp;and&nbsp;ranges</li>
+                  </ol>
+               </section>
+            </section>
+
+            <section>
+               <h2>Course structure (Day 2)</h2>
+               <section class="content">
+               <ol>
+                  <li>Utilities</li>
+                  <li>Invocables</li>
+                  <li>Building&nbsp;a&nbsp;container</li>
+               </ol>
+               </section>
+            </section>
+
+            <section id="transitions">
+               <h2>Practical work</h2>
+            </section>
+
+            <section id="themes">
+               <h2>References</h2>
+               <section class="references">
+                  <ol>
+                     <li>JTC1/SC22/WG21 N4659, <u><a href="http://open-std.org/JTC1/SC22/WG21/docs/papers/2017/n4659.pdf">Working Draft, Standard for Programming Language C++</a></u>. 2017-03-21. International Organization for Standardization, Geneva, Switzerland.</li>
+                     <li>JTC1/SC22/WG21 N4671, <u><a href="http://open-std.org/JTC1/SC22/WG21/docs/papers/2017/n4671.pdf">Working Draft, C++ Extensions for Ranges</a></u>. 2017-06-18. International Organization for Standardization, Geneva, Switzerland.</li>
+                     <li>Stepanov, A &amp; McJones, P. <u><a href="http://elementsofprogramming.com/">Elements of Programming</a></u>. 2009. Addison-Wesley.</li>
+                     <li>Stepanov, A &amp; Rose, D. <u><a href="http://www.fm2gp.com/">From Mathematics to Generic Programming</a></u>. 2011. Addison-Wesley.</li>
+                     <li>Stroustrup, B. <u><a href="http://stroustrup.com/dne.html">Design and Evolution of C++</a></u>. 1994. Addison-Wesley.</li>
+                     <li>Stroustrup, B. <u><a href="http://stroustrup.com/4th.html">The C++ Programming Language</a></u>. Fourth edition. 2013. Addison-Wesley.</li>
+                     <li>Stroustrup, B. <u><a href="http://stroustrup.com/programming.html">Programming -- Principles and Practice Using C++</a></u>. Second edition. 2014. Addison-Wesley</li>
+                  </ol>
+               </section>
+            </section>
+
+            <section>
+               <h2>Thanks!</h2>
+               <section class="content">
+                  <p>Thank you to the people who helped to make this course possible!</p><br />
+                  <table class="thanks" width="100%">
+                     <tr align="left">
+                        <td>Matt Angell</td>
+                        <td>Agustín Bergé</td>
+                        <td>Tim Canens</td>
+                        <td>Casey Carter</td>
+                     </tr>
+                     <tr align="left">
+                        <td>Marshall Clow</td>
+                        <td>Matt Egan</td>
+                        <td>Eric Fiselier</td>
+                        <td>Matt Godbolt</td>
+                     </tr>
+                     <tr align="left">
+                        <td>Kate Gregory</td>
+                        <td>Callum Howard</td>
+                        <td>Rob Irving</td>
+                        <td>Jon Kalb</td>
+                     </tr>
+                     <tr align="left">
+                        <td>Eric Niebler</td>
+                        <td>Patrice Roy</td>
+                        <td>Matt Stark</td>
+                        <td>Margret Steele</td>
+                     </tr>
+                     <tr align="left">
+                        <td>Bjarne Stroustrup</td>
+                        <td>Louise Tait</td>
+                        <td>Jason Turner</td>
+                        <td></td>
+                     </tr>
+                  </table>
+               </section>
+            </section>
+
+            <section id="fragments" data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+               <h1><i>Thylarctos plummetus</i></h1>
+               <table class="fragment">
+                  <tr>
+                     <td><img class="plain" src="images/drop-bear.jpg" /></td>
+                     <td><ul>
+                        <li>Related to koalas</li>
+                        <li>Australian predatory marsupial</li>
+                        <li>Commonly known as "drop bears"</li>
+                        <li>Vegemite is a repellant</li>
+                     </ul></td>
+                  </tr>
+               </table>
+               <p class="fragment"><img class="fake plain" src="images/fake.png"/></p>
+            </section>
+
+            <section>
+               <h2>Why should you care about the Standard Library?</h2>
+               <p class="blink eight-fifty"><span class="fragment">$850</span></p>
+            </section>
+
+            <section>
+               <h2>Why should you (really) care about the Standard Library?</h2>
+               <p class="fragment">Standard</p>
+               <p class="fragment">Extremely well-specified</p>
+               <p class="fragment">Highly tuned</p>
+               <p class="fragment">Thoroughly tested</p>
+               <p class="fragment">Designed to suit as many needs as possible</p>
+            </section>
+         </div>
+
+      </div>
+
+      <script src="../../reveal.js/lib/js/head.min.js"></script>
+      <script src="../../reveal.js/js/reveal.js"></script>
+
+      <script>
+
+         // More info https://github.com/hakimel/reveal.js#configuration
+         Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            // More info https://github.com/hakimel/reveal.js#dependencies
+            dependencies: [
+               { src: '../../reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+               { src: '../../reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+               { src: '../../reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+               { src: '../../reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+               { src: '../../reveal.js/plugin/zoom-js/zoom.js', async: true },
+               { src: '../../reveal.js/plugin/notes/notes.js', async: true }
+            ]
+         });
+
+      </script>
+
+   </body>
+</html>

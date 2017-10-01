@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+
+   <head>
+      <meta charset="utf-8">
+
+      <title>Applied Modern C++: Exploring the Standard Library -- Containers</title>
+
+      <meta name="description" content="Discusses containers">
+      <meta name="author" content="Christopher Di Bella">
+
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+      <link rel="stylesheet" href="../../reveal.js/css/reveal.css">
+      <link rel="stylesheet" href="../../reveal.js/css/theme/black.css" id="theme">
+
+      <!-- Theme used for syntax highlighting of code -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="../../reveal.js/lib/css/darcula.css">
+
+      <!-- Printing and PDF exports -->
+      <script>
+         var link = document.createElement( 'link' );
+         link.rel = 'stylesheet';
+         link.type = '../../reveal.js/text/css';
+         link.href = window.location.search.match( /print-pdf/gi ) ? '../../reveal.js/css/print/pdf.css' : '../../reveal.js/css/print/paper.css';
+         document.getElementsByTagName( 'head' )[0].appendChild( link );
+      </script>
+
+      <!--[if lt IE 9]>
+      <script src="lib/js/html5shiv.js"></script>
+      <![endif]-->
+   </head>
+
+   <body>
+
+      <div class="reveal">
+         <!-- Any section element inside of this container is displayed as a slide -->
+         <div class="slides">
+            <section data-background="images/background.png">
+               <img class="cppcon-brand plain" src="images/cppcon-brand.png" />
+               <div class="title">
+                  <h1>Applied Modern C++:</h1>
+                  <h2>Exploring the Standard Library</h2>
+                  <h3>Containers</h3>
+                  <h4>Christopher Di Bella</h4>
+                  <h4>Runtime Technology Engineer for</h4><img class="codeplay-brand plain" src="images/codeplay.png" />
+               </div>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Goals</h2>
+                  <p>In this section, you will learn about</p>
+                  <ul>
+                     <li>sequence containers</li>
+                     <li class="fragment">associative containers</li>
+                     <li class="fragment">unordered associative containers</li>
+                     <li class="fragment">container adaptors</li>
+                     <li class="fragment">The One Container to Rule Them All</li>
+                  </ul>
+               </section>
+
+               <section>
+                  <h2>Outcomes</h2>
+                  <p>After this section, you will be able to</p>
+                  <ul>
+                     <li>choose appropriate containers as data structures</li>
+                     <li>build custom containers from The One Container</li>
+                  </ul>
+               </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2>What is a container?</h2>
+                  <p>An object that</p>
+                  <ul>
+                     <li>stores other objects</li>
+                     <li class="fragment">owns other objects</li>
+                  </ul>
+                  <p class="fragment">Three kinds</p>
+                  <ol class="fragment">
+                     <li>Sequence</li>
+                     <li>Associative</li>
+                     <li>Unordered associative</li>
+                     <li>Adaptor</li>
+                  </ol>
+               </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Sequence containers</h2>
+                  <p style="text-align: left;">A collection of objects
+                     <span class="fragment">organised strictly into linear arrangement</span>
+                  </p>
+               </section>
+               <section>
+                  <h2>Sequence containers</h2>
+                  <span class="content">
+                  <table>
+                     <tr>
+                        <td>Default container</td>
+                        <td></td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <code>std::vector&lt;T&gt;</code><br />
+                           <br />
+                           Special-case
+                        </td>
+                        <td></td>
+                     </tr>
+                     <tr class="fragment">
+                        <td>
+                           <code>std::deque&lt;T&gt;</code><br />
+                           <code>std::forward_list&lt;T&gt;</code><br />
+                           <code>std::list&lt;T&gt;</code><br />
+                           <br />
+                           Extreme special-case
+                        </td>
+                        <td>
+                           Double-ended queue<br />
+                           Singly-linked list<br />
+                           Doubly-linked list<br />
+                        </td>
+                     </tr>
+                     <tr class="fragment">
+                        <td><code>std::array&lt;T, N&gt;</code></td>
+                        <td>Encapulation over arrays</td>
+                     </tr>
+                  </table>
+                  </span>
+               </section>
+
+               <section>
+                  <h2><code>vector&lt;bool&gt;</code></h2>
+                  <ul>
+                     <li>Not a container</li>
+                     <li>Fancy name for a dynamically-sized bit-field</li>
+                     <li>For a container of strict <code>bool</code>s
+                        <ul>
+                           <li><code>boost::container::vector&lt;bool&gt;</code></li>
+                           <li><code>deque&lt;bool&gt;</code></li>
+                        </ul>
+                     </li>
+                  </ul>
+               </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Reference invalidation</h2>
+                  <h3>Insertion and emplacement</h3>
+
+<pre><code>Regular v = std::vector&lt;int&gt;(10);
+
+const ranges::SignedIntegral&amp; a = v.back();
+std::cout &lt;&lt; a &lt;&lt; '\n'; // okay
+
+<span class="fragment fade-in" data-fragment-index="1">
+v.push_back(/* ... */);
+std::cout &lt;&lt; a &lt;&lt; '\n'; <span class="fragment" data-fragment-index="3">// possibly undefined</span>
+</span>
+
+const ranges::SignedIntegral&amp; b = v[5];
+std::cout &lt;&lt; b &lt;&lt; '\n'; // okay
+
+<span class="fragment fade-in" data-fragment-index="2">
+v.emplace(/* ... */);
+std::cout &lt;&lt; b &lt;&lt; '\n'; <span class="fragment" data-fragment-index="3">// possibly undefined</span>
+</span></code></pre>
+               </section>
+
+               <section>
+                  <h2>Reference invalidation</h2>
+                  <h3>Erasure</h3>
+<pre><code>Regular v = std::vector&lt;int&gt;(10);
+
+const ranges::SignedIntegral&amp; f = v.front();
+std::cout &lt;&lt; f &lt;&lt; '\n'; // okay
+
+const ranges::SignedIntegral&amp; b = v.back();
+std::cout &lt;&lt; b &lt;&lt; '\n'; // okay
+
+<span class="fragment" data-fragment-index="1">v.pop_back();
+std::cout &lt;&lt; f &lt;&lt; '\n'; <span class="fragment" data-fragment-index="2">// okay</span>
+std::cout &lt;&lt; b &lt;&lt; '\n'; <span class="fragment" data-fragment-index="2">// undefined</span>
+</span>
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Reference invalidation</h2>
+                  <h3>More erasure</h3>
+<pre><code class="cpp">Regular v = std::vector{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+const Regular&amp; a = v[3];
+std::cout &lt;&lt; a &lt;&lt; '\n'; // okay
+
+const Regular&amp; b = v[5];
+std::cout &lt;&lt; b &lt;&lt; '\n'; // okay
+
+v.erase(ranges::find(v, 4));
+<span class="fragment" data-fragment-index="1">std::cout &lt;&lt; a &lt;&lt; '\n'; <span class="fragment" data-fragment-index="2">// okay</span>
+std::cout &lt;&lt; b &lt;&lt; '\n';</span> <span class="fragment" data-fragment-index="2">//undefined</span>
+
+<span class="fragment" data-fragment-index="3">v.clear();
+std::cout &lt;&lt; a &lt;&lt; '\n';</span> <span class="fragment" data-fragment-index="4">// undefined</span>
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Reference preservation</h2>
+<pre><code class="cpp">Regular v = std::vector{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+v.reserve(v.size() + 10);
+
+const Regular&amp; a = v.back();
+
+for (Regular i = v.size(); i &lt; v.capacity(); ++i) {
+   v.emplace_back(static_cast&lt;int&gt;(i));
+   std::cout &lt;&lt; a &lt;&lt; '\n'; <span class="fragment" data-fragment-index="1">// okay</span>
+}
+
+<span class="fragment" data-fragment-index="2">v.push_back(v.size());
+std::cout &lt;&lt; a &lt;&lt; '\n';</span> <span class="fragment" data-fragment-index="3">// undefined</span>
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Reference preservation failure</h2>
+<pre><code class="cpp">Regular v = std::vector{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+v.reserve(v.size() + 10);
+const Regular&amp; f = v.front();
+const Regular&amp; b = v.back();
+
+for (Regular i = v.size(); i &lt; v.capacity(); ++i) {
+   v.emplace(v.begin() + 1, i);
+
+   <span class="fragment" data-fragment-index="1">std::cout &lt;&lt; f &lt;&lt; '\n'; <span class="fragment" data-fragment-index="2">// okay for all f</span>
+   std::cout &lt;&lt; b &lt;&lt; '\n'; <span class="fragment" data-fragment-index="2">// undefined</span></span>
+}
+</code></pre>
+               </section>
+
+               <section>
+                  <h2><code>deque</code> reference invalidation</h2>
+                  <ul>
+                     <li class="fragment fade-out" data-fragment-index="1">Some references to elements invalidated
+                        <ul>
+                           <li><code>pop_front</code>, <code>erase(d.begin(), x)</code></li>
+                           <li><code>pop_back</code>, <code>erase(y, d.end())</code></li>
+                           <li><code>resize(x)</code> if <code>x &lt; d.size()</code></li>
+                        </ul>
+                     </li>
+                     <li class="fragment fade-in" data-fragment-index="1">All references to elements invalidated
+                        <ul>
+                           <li><code>insert</code>, <code>emplace</code></li>
+                           <li><code>clear</code>, <code>erase(x, y)</code></li>
+                           <li><code>resize(x)</code> if <code>x &gt; d.size()</code></li>
+                        </ul>
+                     </li>
+                  </ul>
+               </section>
+
+               <section>
+                  <h2><code>forward_list</code> and <code>list</code> reference invalidation</h2>
+                  <p>Only erasure operations</p>
+               </section>
+            </section>
+
+            <section>
+               <section>
+                  <h2>Associative containers</h2>
+                  <h2 class="fragment">Unordered associative containers</h2>
+               </section>
+
+               <section>
+                  <h2>Associative containers</h2>
+                  <span class="content">
+                  <table>
+                     <tr>
+                        <td>Unique association</td>
+                        <td>Equivalent association</td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <code>set&lt;K&gt;</code><br />
+                           <code>map&lt;K, V&gt;</code><br />
+                           <br />
+                           <span class="fragment" data-fragment-index="2">
+                              <code>unordered_set&lt;K&gt;</code><br />
+                              <code>unordered_map&lt;K, V&gt;</code><br />
+                           </span>
+                        </td>
+                        <td>
+                           <code>multiset&lt;K&gt;</code><br />
+                           <code>multimap&lt;K, V&gt;</code><br />
+                           <br />
+                           <span class="fragment" data-fragment-index="2">
+                              <code>unordered_multiset&lt;K&gt;</code><br />
+                              <code>unordered_multimap&lt;K, V&gt;</code><br />
+                           </span>
+                        </td>
+                     </tr>
+                  </table>
+                  </span>
+               </section>
+
+               <section>
+                  <h2>std::set&lt;Key&gt;</h2>
+<pre><code class="cpp">#include &lt;set&gt;
+// ...
+
+Regular en = open_dictionary("en_GB");
+en.merge("en_US");
+
+<span class="fragment">if (Regular p = en.insert(Word{"covefefe"}); p.second)
+   std::cout &lt;&lt; "Added new word \"" &lt;&lt; *p.first &lt;&lt; "\".\n";</span>
+
+<span class="fragment">if (Regular p = en.emplace("covfefe"); not p.second)
+   std::cout &lt;&lt; "Word \"" &lt;&lt; *p.first &lt;&lt; "\" already exists.\n";</span>
+
+<span class="fragment">if (Regular i = en.upper_bound("kangaroo"); i != ranges::cend(en))
+   std::cout &lt;&lt; "Word \"" &lt;&lt; *i &lt;&lt; "\" comes after \"kangaroo\".\n";</span>
+
+<span class="fragment">en.erase(<span class="fragment">en.find(Word{"covfefe"})</span>);</span>
+</code></pre>
+               </section>
+
+               <section>
+                  <h2><code>map&lt;Key, T&gt;</code> operations different to <code>set&lt;T&gt;</code></h2>
+<pre><code>Regular title = "Jurassic Park"s
+Regular films = std::map&lt;std::string, int&gt;{{title, 1993}, {"Star Wars"s, 1979}};
+
+if (Regular i = films.insert_or_assign({"Jurassic Park"s, 2015}); not i.second)
+   std::cout &lt;&lt; "modified " &lt;&lt; i-&gt;first &lt;&lt; "'s value to " &lt;&lt; i-&gt;second &lt;&lt; '\n';
+
+<span class="fragment highlight-red" data-fragment-index="1"><span class="fragment fade-out" data-fragment-index="2">films.emplace(std::move(title), 1993);</span></span>
+
+<span class="fragment fade-in" data-fragment-index="2">if (Regular p = films.try_emplace(std::move(title), 1993); not p.second)
+   std::cout &lt;&lt; p.first-&gt;first &lt;&lt; " already exists with value " &lt;&lt; p.first-&gt;second &lt;&lt; '\n';
+</span></code></pre>
+               </section>
+
+               <section>
+                  <h3><code>map&lt;Key, T&gt;::operator[](const Key&amp;)</code></h3>
+<pre><code class="cpp">Regular world_leaders = map{{"AU"s, 29}, {"UK"s, 76}, {"US"s, 45}};
+std::cout &lt;&lt; world_leaders["AU"] &lt;&lt; " " &lt;&lt; world_leaders["CA"];
+world_leaders["NZ"] = 39;
+<span class="fragment">std::cout &lt;&lt; world_leaders.at("UK") &lt;&lt; ' ' &lt;&lt; world_leaders.at("JPN");</span>
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Ordering on assoicative containers</h2>
+
+<pre><code class="cpp">struct Greater_salary {
+   bool operator()(const Employee&amp; const Employee&amp; b) const noexcept
+   {
+      return a.salary() &gt; b.salary();
+   }
+};
+
+Regular executives = std::set&lt;Employee, Greater_salary&gt;{};
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Hashing on unordered associative containers</h2>
+<pre><code class="cpp">#include &lt;functional&gt;
+namespace std {
+   <span class="fragment">template &lt;&gt;
+   struct hash&lt;amcpp::Employee&gt; {
+      <span class="fragment">using argument_type = amcpp::Employee;
+      using result_type = size_t;
+
+      <span class="fragment">result_type operator()(const argument_type&amp; e) const
+      {
+         return hash&lt;decltype(e.id())&gt;{}(e.id());
+      }</span></span>
+   };</span>
+} //namespace std
+</code></pre>
+               </section>
+            </section>
+
+            <section>
+               <h2>Container adaptors</h2>
+               <ul>
+                  <li><code>stack&lt;T, Cont&gt;</code></li>
+                  <li><code>queue&lt;T, Cont&gt;</code></li>
+                  <li><code>priority_queue&lt;T, Cont, Comp&gt;</code></li>
+               </ul>
+            </section>
+
+            <section>
+               <section data-background="images/one-ring.png"></section>
+
+               <section>
+                  <h2>Which container do you choose?</h2>
+                  <p>Constant sequence of N integers have been shuffled</p>
+
+                  <span class="fragment"><ol>
+                     <li>Sort the sequence ASAP</li>
+                     <li>Sort the sequence with as little memory as possible</li>
+                     <li>Tasks 1 and 2 together</li>
+                  </ol></span>
+
+                  <span class="fragment"><p><b>Constraint:</b> Need to insert elements as you see them.</p>
+<pre><code>e.g. sequence is {5, 2, 3, 4, 1}
+insertion goes
+5
+2, 5
+2, 3, 5
+2, 3, 4, 5
+1, 2, 3, 4, 5
+</code></pre></span>
+               </section>
+
+               <section>
+                  <h2>Algorithm</h2>
+<pre><code class="cpp">template &lt;template &lt;typename...&gt; typename C, typename T&gt;
+auto sort(const std::vector&lt;T&gt;&amp; add, const std::vector&lt;T&gt;&amp; rem)
+{
+   auto c = C&lt;T&gt;{};
+   for (const auto&amp; i : add)
+      c.emplace(ranges::find_if(c, [&amp;i](const auto&amp; x) {
+         return x &lt; i; }, i);
+
+   return c;
+}
+</code></pre>
+               </section>
+
+               <section>
+                  <h2>Sequence race</h2>
+               </section>
+
+               <section>
+                  <h2>Lookup costs</h2>
+
+<pre><code>std::vector&lt;std::pair&lt;Key, T&gt;&gt;
+std::map&lt;Key, T&gt;
+std::unordered_map&lt;Key, T&gt;
+</code></pre>
+                  <span class="fragment">
+                     <ol>
+                        <li>Subscript operator</li>
+                        <li>Standard algorithms</li>
+                        <li>General iteration</li>
+                     </ol>
+                  </span>
+               </section>
+            </section>
+         </div>
+
+      </div>
+
+      <script src="../../reveal.js/lib/js/head.min.js"></script>
+      <script src="../../reveal.js/js/reveal.js"></script>
+
+      <script>
+
+         // More info https://github.com/hakimel/reveal.js#configuration
+         Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+            // More info https://github.com/hakimel/reveal.js#dependencies
+            dependencies: [
+               { src: '../../reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+               { src: '../../reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+               { src: '../../reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+               { src: '../../reveal.js/plugin/highlight/highlight.pack.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+               { src: '../../reveal.js/plugin/zoom-js/zoom.js', async: true },
+               { src: '../../reveal.js/plugin/notes/notes.js', async: true }
+            ]
+         });
+
+      </script>
+
+   </body>
+</html>
