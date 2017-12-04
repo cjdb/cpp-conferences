@@ -1,4 +1,4 @@
-# CppCon Resources - Chris Di Bella
+# CppCon Resources - Christopher Di Bella
 
 ## Index
 
