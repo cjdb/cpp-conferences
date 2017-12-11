@@ -46,7 +46,7 @@
           </div>
         </section>
 
-        <section>
+        <section data-transition="slide">
           <!-- Introduction -->
           <section>
             <img class="plain" src="images/australia2.jpg" style="width:80%;"/>
@@ -106,19 +106,15 @@
             <img class="plain" src="images/thinker.jpg" style="width:50%;"/>
           </section>
           <section><h2>We teach to learn</h2></section>
-          <section><h2>Code versus slides</h2></section>
-          <section><h2>Labs and assignments</h2></section>
           <section><h2>Class reviews</h2></section>
 
           <!-- Summary -->
-          <section data-transition="fade-out">
+          <section>
             <h2>Why do we teach?</h2>
             <ul>
-              <li class="fragment" data-fragment-index="4">We teach to learn</li>
-              <li class="fragment" data-fragment-index="3">We <i>all</i> make mistakes</li>
-              <li class="fragment" data-fragment-index="2">Code versus slides</li>
-              <li class="fragment" data-fragment-index="1">Labs and assignments</li>
-              <li class="fragment">Class reviews</li>
+              <li class="fragment" data-fragment-index="2">We teach to learn</li>
+              <li class="fragment" data-fragment-index="1">We <i>all</i> make mistakes</li>
+              <li>Class reviews</li>
             </ul>
           </section>
           <section class="open">
@@ -126,8 +122,6 @@
             <ul>
               <li>We teach to learn</li>
               <li>We <i>all</i> make mistakes</li>
-              <li>Code versus slides</li>
-              <li>Labs and assignments</li>
               <li>Class reviews</li>
             </ul>
           </section>
@@ -136,8 +130,6 @@
             <ul>
               <li>We teach to learn</li>
               <li>We <i>all</i> make mistakes</li>
-              <li>Code versus slides</li>
-              <li>Labs and assignments</li>
               <li>Class reviews</li>
             </ul>
           </section>
@@ -146,14 +138,27 @@
         <!-- What are we teaching? -->
         <section data-transition="slide">
           <section><h1>What are we teaching?</h1></section>
-          <section><h2>Goals</h2></section>
           <section>
-            <h2>Learning objectives</h2>
-            <h4><i>"Students learn about..."</i></h4>
-            <span class="fragment">
-              <h2>Learning outcomes</h2>
-              <h4><i>"Students learn to..."</i></h4>
-            </span>
+            <div style="display:table;">
+              <div style="display:table-cell;position:relative;top:-150px;">
+                <h2>Learning objectives</h2>
+                <h4><i>"Students will develop..."</i></h4>
+              </div>
+              <div style="display:table-cell;max-width:800px;">
+                <img class="plain" src="images/objectives.png" style="position:relative;top:120px;max-width:100%;"/>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div style="display:table;">
+              <div style="display:table-cell;position:relative;top:-150px;">
+                <h2>Learning outcomes</h2>
+                <h4><i>"Students learn to..."</i></h4>
+              </div>
+              <div style="display:table-cell;max-width:800px;">
+                <img class="plain" src="images/outcomes.png" style="position:relative;top:120px;max-width:100%" />
+              </div>
+            </div>
           </section>
           <section><h2>What is C++?</h2></section>
           <section><h2>C++ is <i>C with Classes</i></h2></section>
@@ -173,47 +178,27 @@
           <section>
             <h2>What are we teaching?</h2>
             <ul>
-              <li class="fragment" data-fragment-index="6">Goals</li>
-              <li class="fragment" data-fragment-index="5">Learning objectives</li>
-              <li class="fragment" data-fragment-index="4">Learning outcomes</li>
-              <li class="fragment" data-fragment-index="3">C++ is not <i>C with Classes</i></li>
-              <li class="fragment" data-fragment-index="2">C++ is not <i>low-level Java</i></li>
-              <li class="fragment" data-fragment-index="1">
-                C++ is a <i>low-level</i> programming language
-              </li>
-              <li class="fragment">
-                C++ is a programming language that offers the right abstractions at the right time
-              </li>
+              <li class="fragment" data-fragment-index="2">Learning objectives</li>
+              <li class="fragment" data-fragment-index="1">Learning outcomes</li>
+              <li>Provide a correct definition for C++</li>
             </ul>
           </section>
           <section class="open">
               <h2>What are we teaching?</h2>
               <ul>
-                <li>Goals</li>
                 <li>Learning objectives</li>
                 <li>Learning outcomes</li>
-                <li>C++ is not <i>C with Classes</i></li>
-                <li>C++ is not <i>low-level Java</i></li>
-                <li>C++ is not a <i>low-level</i> programming language</li>
-                <li>
-                  C++ is a programming language that offers the right abstractions at the right time
-                </li>
+                <li>Provide a correct definition for C++</li>
               </ul>
             </section>
             <section class="close">
-                <h2>What are we teaching?</h2>
-                <ul>
-                  <li>Goals</li>
-                  <li>Learning objectives</li>
-                  <li>Learning outcomes</li>
-                  <li>C++ is not <i>C with Classes</i></li>
-                  <li>C++ is not <i>low-level Java</i></li>
-                  <li>C++ is not a <i>low-level</i> programming language</li>
-                  <li>
-                    C++ is a programming language that offers the right abstractions at the right time
-                  </li>
-                </ul>
-              </section>
+              <h2>What are we teaching?</h2>
+              <ul>
+                <li>Learning objectives</li>
+                <li>Learning outcomes</li>
+                <li>Provide a correct definition for C++</li>
+              </ul>
+            </section>
         </section>
         <!-- Learing and Teaching Resources -->
         <section data-transition="slide">
@@ -221,10 +206,10 @@
           <section>
             <h2>Books</h2>
             <p class="fragment" style="text-align:left;"><q>
-              "...there are very many very bad C++ books out there. And we are not talking about bad
+              There are very many very bad C++ books out there. And we are not talking about bad
               style, but things like <span class="fragment" style="color: #ff0000;">sporting
-              glaringly obvious factual errors</span><span class="fragment">and
-              <span style="color: #ff0000;">promoting abysmally bad programming styles</span>."</span>
+              glaringly obvious factual errors</span><span class="fragment"> and
+              <span style="color: #ff0000;">promoting abysmally bad programming styles</span>.</span>
             </q></p>
             <span class="fragment">
               &mdash;<a href="https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list">The Definitive C++ Book Guide and List</a>
@@ -232,7 +217,6 @@
           </section>
           <section>
             <h2>Resources for C++ novices</h2>
-            <h3>And their teachers!</h3>
             <table style="border: 0px solid #CCC; border-collapse: collapse;"><tr>
               <td style="border:none">
                 <img class="fragment plain" src="images/tour.jpg" width="76%"/>
@@ -295,14 +279,15 @@
               <li class="fragment" data-fragment-index="3">Resources for teachers</li>
               <li class="fragment" data-fragment-index="2">C++ Standard for fact-checking</li>
               <li class="fragment" data-fragment-index="1">C++ Core Guidelines as a style guide</li>
-              <li class="fragment">Online resources</li>
+              <li>Online resources</li>
             </ul>
           </section>
           <section class="open">
             <h2>Learning and teaching resources</h2>
             <ul>
-              <li>Resources for students and teachers</li>
-              <li>Resources for only teachers</li>
+              <li>Resources for C++ novices</li>
+              <li>Resources for advanced classes</li>
+              <li>Resources for teachers</li>
               <li>C++ Standard for fact-checking</li>
               <li>C++ Core Guidelines as a style guide</li>
               <li>Online resources</li>
@@ -311,8 +296,9 @@
           <section class="close">
             <h2>Learning and teaching resources</h2>
             <ul>
-              <li>Resources for students and teachers</li>
-              <li>Resources for only teachers</li>
+              <li>Resources for C++ novices</li>
+              <li>Resources for advanced classes</li>
+              <li>Resources for teachers</li>
               <li>C++ Standard for fact-checking</li>
               <li>C++ Core Guidelines as a style guide</li>
               <li>Online resources</li>
@@ -429,7 +415,43 @@ int main()
               <li class="fragment">Undefined behavior</li>
             </ul>
           </section>
-          <section><h2>The Standard (continuous) Library</h2></section>
+          <section>
+            <h2>The Standard (continuous) Library</h2>
+            <table style="border: 0px solid #CCC; border-collapse: collapse;">
+              <tr><td style="border: none;">
+<pre><code class="cpp">auto v = make_some_vector();
+for (auto&amp; i : v) {
+   for (auto&amp; j : v) {
+      if (j &lt; i) {
+         using std::swap;
+         swap(i, j);
+      }
+   }
+}</code></pre>
+            </td><td class="fragment" data-fragment-index="1" style="border: none;">
+<pre><code class="cpp">auto v = make_some_vector();
+std::stable_sort(begin(v), end(v));
+<span class="fragment" data-fragment-index="2">// ranges::stable_sort(v);</span>
+</code></pre>
+              </td></tr>
+              <tr><td style="border: none;">
+<pre><code class="cpp">auto v = make_some_vector();
+auto n = 0;
+for (const auto&amp; i : v) {
+   if (i == foo) {
+      ++n;
+   }
+}
+// use of n here...
+</code></pre>
+              </td><td class="fragment" data-fragment-index="1" style="border: none;">
+<pre><code class="cpp">auto v = make_some_vector();
+const auto n = std::count(begin(v), end(v), foo);
+<span class="fragment" data-fragment-index="2">// ranges::count(v);</span>
+</code></pre>
+              </td></tr>
+            </table>
+          </section>
           <section data-background-color="#ffff88">
             <h2>Parallel Programming</h2>
             <img class="plain" src="images/codeplay.png" width="70%"/>
@@ -617,8 +639,10 @@ auto insertion_sort(I first, S last)
           progress: true,
           history: true,
           center: true,
+          slideNumber: true,
 
           transition: 'none', // none/fade/slide/convex/concave/zoom
+          backgroundTransition: 'none',
 
           // More info https://github.com/hakimel/reveal.js#dependencies
           dependencies: [
