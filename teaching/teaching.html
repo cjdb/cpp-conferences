@@ -1,636 +1,661 @@
 <!doctype html>
 <html lang="en">
 
-   <head>
-      <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8">
 
-      <title>Learning C++ isn't Difficult -- Teaching C++ is the Trick</title>
+    <title>Learning C++ isn't Difficult -- Teaching C++ is the Trick</title>
 
-      <meta name="description" content="Discusses iterators, sentinels, and ranges">
-      <meta name="author" content="Christopher Di Bella">
+    <meta name="description" content="Discusses iterators, sentinels, and ranges">
+    <meta name="author" content="Christopher Di Bella">
 
-      <meta name="apple-mobile-web-app-capable" content="yes">
-      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-      <link rel="stylesheet" href="css/reveal.css">
-      <link rel="stylesheet" href="css/theme/black.css" id="theme">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css" id="theme">
 
-      <!-- Theme used for syntax highlighting of code -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-      <link rel="stylesheet" href="lib/css/darcula.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="lib/css/darcula.css">
 
-      <!-- Printing and PDF exports -->
-      <script>
-         var link = document.createElement( 'link' );
-         link.rel = 'stylesheet';
-         link.type = 'text/css';
-         link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-         document.getElementsByTagName( 'head' )[0].appendChild( link );
-      </script>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
 
-      <!--[if lt IE 9]>
-      <script src="lib/js/html5shiv.js"></script>
-      <![endif]-->
-   </head>
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
 
-   <body>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-background-color="#3A7A3A">
+          <div class="title">
+            <h1>Learning C++ isn't Difficult</h1>
+            <h2>Teaching is the Trick</h2>
+            <h3>Christopher Di Bella</h3>
+          </div>
+        </section>
 
-      <div class="reveal">
-         <div class="slides">
-            <section data-background-color="#3A7A3A">
-               <div class="title">
-                  <h1>Learning C++ isn't Difficult</h1>
-                  <h2>Teaching is the Trick</h2>
-                  <h4>Christopher Di Bella</h4>
-                  <h4>Runtime Technology Engineer for</h4><img class="codeplay-brand plain" src="images/codeplay.png" />
-               </div>
+        <section data-transition="slide">
+          <!-- Introduction -->
+          <section>
+            <img class="plain" src="images/australia2.jpg" style="width:80%;"/>
+          </section>
+          <section>
+            <img class="plain" src="images/nasdaq.png" />
+            <img class="unsw-brand plain" src="images/unsw.png" />
+          </section>
+          <section data-background="images/australia.png"></section>
+          <section data-background="images/uk.png"></section>
+          <section data-background="#4d7e65">
+            <img class="codeplay-brand-large plain" src="images/codeplay.png" />
+          </section>
+          <section data-background="#4d7e65">
+            <img class="codeplay-brand-large plain" src="images/cppcon-brand.png" />
+          </section>
+
+          <section>
+            <h2>Agenda</h2>
+            <ol>
+              <li>Why do we teach?</li>
+              <li>What are we teaching?</li>
+              <li>Learning and Teaching Resources</li>
+              <li>Tooling</li>
+              <li>Content to address</li>
+              <li>Content to avoid</li>
+            </ol>
+          </section>
+          <section class="open">
+              <h2>Agenda</h2>
+              <ol>
+                <li>Why do we teach?</li>
+                <li>What are we teaching?</li>
+                <li>Learning and Teaching Resources</li>
+                <li>Tooling</li>
+                <li>Content to address</li>
+                <li>Content to avoid</li>
+              </ol>
             </section>
+          <section class="close">
+              <h2>Agenda</h2>
+              <ol>
+                <li>Why do we teach?</li>
+                <li>What are we teaching?</li>
+                <li>Learning and Teaching Resources</li>
+                <li>Tooling</li>
+                <li>Content to address</li>
+                <li>Content to avoid</li>
+              </ol>
+          </section>
+        </section>
 
-            <section>
-                  <section>
-                     <img class="plain" src="images/australia2.jpg" style="width:80%;"/>
-                  </section>
-                  <section>
-                     <img class="plain" src="images/nasdaq.png" />
-                     <img class="unsw-brand plain" src="images/unsw.png" />
-                  </section>
-                  <section data-background="images/uk.png"></section>
-                  <section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
-                     <img class="codeplay-brand-large plain" src="images/codeplay.png" />
-                  </section>
-      
-                  <section data-transition="fade-out">
-                     <img class="snowboard plain" src="images/snowboarding.jpg"/>
-                     <img class="film plain" src="images/film.jpg"/>
-                     <img class="sue plain" src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Sues_skeleton.jpg"/>
-                     <img class="star-wars plain" src="images/star-wars.png" />
-                  </section>
-      
-                  <section data-transition="fade-out">
-                     <h2>Agenda</h2>
-                     <ol>
-                        <li>Why do we teach?</li>
-                        <li>What is C++?</li>
-                        <li>Learning and Teaching Resources</li>
-                        <li>Tools</li>
-                        <li>Content to address and to avoid</li>
-                     </ol>
-                  </section>
-      
-                  <section class="open" data-transition="fade-in fade-out">
-                     <h2>Agenda</h2>
-                     <ol>
-                        <li>Why do we teach?</li>
-                        <li>What is C++?</li>
-                        <li>Learning and Teaching Resources</li>
-                        <li>Tools</li>
-                        <li>Content to address and to avoid</li>
-                     </ol>
-                  </section>
-      
-                  <section class="close" data-transition="fade-in">
-                     <h2>Agenda</h2>
-                     <ol>
-                        <li>Why do we teach?</li>
-                        <li>What is C++?</li>
-                        <li>Learning and Teaching Resources</li>
-                        <li>Tools</li>
-                        <li>Content to address and to avoid</li>
-                     </ol>
-                  </section>
+        <!-- Why do we teach? -->
+        <section>
+          <section><h1>Why do we teach?</h1></section>
+          <section>
+            <img class="plain" src="images/thinker.jpg" style="width:50%;"/>
+          </section>
+          <section><h2>We teach to learn</h2></section>
+          <section><h2>Class reviews</h2></section>
+
+          <!-- Summary -->
+          <section>
+            <h2>Why do we teach?</h2>
+            <ul>
+              <li class="fragment" data-fragment-index="2">We teach to learn</li>
+              <li class="fragment" data-fragment-index="1">We <i>all</i> make mistakes</li>
+              <li>Class reviews</li>
+            </ul>
+          </section>
+          <section class="open">
+            <h2>Why do we teach?</h2>
+            <ul>
+              <li>We teach to learn</li>
+              <li>We <i>all</i> make mistakes</li>
+              <li>Class reviews</li>
+            </ul>
+          </section>
+          <section class="close">
+            <h2>Why do we teach?</h2>
+            <ul>
+              <li>We teach to learn</li>
+              <li>We <i>all</i> make mistakes</li>
+              <li>Class reviews</li>
+            </ul>
+          </section>
+        </section>
+
+        <!-- What are we teaching? -->
+        <section data-transition="slide">
+          <section><h1>What are we teaching?</h1></section>
+          <section>
+            <div style="display:table;">
+              <div style="display:table-cell;position:relative;top:-150px;">
+                <h2>Learning objectives</h2>
+                <h4><i>"Students will develop..."</i></h4>
+              </div>
+              <div style="display:table-cell;max-width:800px;">
+                <img class="plain" src="images/objectives.png" style="position:relative;top:120px;max-width:100%;"/>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div style="display:table;">
+              <div style="display:table-cell;position:relative;top:-150px;">
+                <h2>Learning outcomes</h2>
+                <h4><i>"Students learn to..."</i></h4>
+              </div>
+              <div style="display:table-cell;max-width:800px;">
+                <img class="plain" src="images/outcomes.png" style="position:relative;top:120px;max-width:100%" />
+              </div>
+            </div>
+          </section>
+          <section><h2>What is C++?</h2></section>
+          <section><h2>C++ is <i>C with Classes</i></h2></section>
+          <section data-background="images/uk.png"></section>
+          <section data-background="images/de.svg"></section>
+          <section><h2>C++ is <i>low-level Java</i></h2></section>
+          <section><h2>C++ is a <i>low-level</i> programming language</h2></section>
+          <section>
+            <h2>C++ is a high-level general-purpose multi-paradigm programming language</h2>
+          </section>
+          <section>
+            <h2>C++ is a programming language</h2>
+            <h3 class="fragment fade-in">that offers the right abstractions at the right time</h3>
+          </section>
+
+          <!-- Summary -->
+          <section>
+            <h2>What are we teaching?</h2>
+            <ul>
+              <li class="fragment" data-fragment-index="2">Learning objectives</li>
+              <li class="fragment" data-fragment-index="1">Learning outcomes</li>
+              <li>Provide a correct definition for C++</li>
+            </ul>
+          </section>
+          <section class="open">
+              <h2>What are we teaching?</h2>
+              <ul>
+                <li>Learning objectives</li>
+                <li>Learning outcomes</li>
+                <li>Provide a correct definition for C++</li>
+              </ul>
             </section>
-
-            <section>
-               <section>
-                  <h1>Why Do We Teach?</h1>
-               </section>
-
-               <section data-transition="fade-out">
-                  <h1><i>Thylarctos plummetus</i></h1>
-                  <img class="plain" src="images/drop-bear.jpg" />
-                  <aside class="notes">
-                     <ul>
-                        <li>Carnivorous Australian marsuipial</li>
-                        <li>Literally drops on its prey</li>
-                        <li>Nicknamed drop bears</li>
-                        <li>Vegemite is a repellant</li>
-                     </ul>
-                  </aside>
-               </section>
-               <section class="open" data-transition="fade-out">
-                  <h1><i>Thylarctos plummetus</i></h1>
-                  <img class="plain" src="images/drop-bear.jpg" />
-                  <aside class="notes">
-                     <ul>
-                        <li>Does anyone want to discuss this?</li>
-                     </ul>
-                  </aside>
-               </section>
-               <section data-transition="fade-in">
-                  <h1><i>Thylarctos plummetus</i></h1>
-                  <img class="plain" src="images/drop-bear.jpg" />
-                  <img class="fake plain" src="images/fake.png"/>
-                  <aside class="notes">
-                     <ul>
-                        <li>Drop bears are a hoax</li>
-                        <li>The person at the front is <i>not</i> the be-all expert</li>
-                        <li>It's okay to be challenged</li>
-                        <li>Need to be open to being fact-checked</li>
-                     </ul>
-                  </aside>
-               </section>
-
-               <section data-transition="fade-out">
-                  <h1>Those Who Can't Do, Teach</h1>
-                  <aside class="notes">
-                     <ul>
-                        <li>Who agrees with this?</li>
-                     </ul>
-                  </aside>
-               </section>
-               <section class="close" data-transition="fade-in">
-                  <h1>Those Who Can't Do, Teach</h1>
-                  <aside class="notes">
-                     <ul>
-                        <li>Who agrees with this?</li>
-                        <li>Abhorrent philosophy</li>
-                        <li>If you are teaching because you believe this, you're in the wrong profession</li>
-                     </ul>
-                  </aside>
-               </section>
-
-               <section><h1>Code versus slides</h1></section>
-               <section><h1>Exercises and assignments</h1></section>
-               <section>
-                  <h1>Class review</h1>
-                  <aside class="notes">
-                     <ul>
-                        <li>Get as many people to review your class as possible</li>
-                        <li>Class reviews should be more aggressive than reviewing safety-critical code</li>
-                        <li>Your students might one day write code for your self-driving car!</li>
-                     </ul>
-                  </aside>
-               </section>
-
-               <section class="open" data-transition="fade-out">
-                  <h2>Why do we teach?</h2>
-                  <ul>
-                     <li class="fragment" data-fragment-index="4">Mistakes and misgivings</li>
-                     <li class="fragment" data-fragment-index="3"><s>Those Who Can't Do, Teach</s></li>
-                     <li class="fragment" data-fragment-index="2">Code and slides</li>
-                     <li class="fragment" data-fragment-index="1">Exercises and assignments</li>
-                     <li class="fragment" data-fragment-index="0">Class review</li>
-                  </ul>
-               </section>
-               <section class="close" data-transition="fade-in">
-                     <h2>Why do we teach?</h2>
-                     <ul>
-                        <li>Mistakes and misgivings</li>
-                        <li><s>Those Who Can't Do, Teach</s></li>
-                        <li>Code and slides</li>
-                        <li>Exercises and assignments</li>
-                        <li>Class review</li>
-                     </ul>
-                  </section>
+            <section class="close">
+              <h2>What are we teaching?</h2>
+              <ul>
+                <li>Learning objectives</li>
+                <li>Learning outcomes</li>
+                <li>Provide a correct definition for C++</li>
+              </ul>
             </section>
+        </section>
+        <!-- Learing and Teaching Resources -->
+        <section data-transition="slide">
+          <section><h1>Learning and teaching resources</h1></section>
+          <section>
+            <h2>Books</h2>
+            <p class="fragment" style="text-align:left;"><q>
+              There are very many very bad C++ books out there. And we are not talking about bad
+              style, but things like <span class="fragment" style="color: #ff0000;">sporting
+              glaringly obvious factual errors</span><span class="fragment"> and
+              <span style="color: #ff0000;">promoting abysmally bad programming styles</span>.</span>
+            </q></p>
+            <span class="fragment">
+              &mdash;<a href="https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list">The Definitive C++ Book Guide and List</a>
+            </span>
+          </section>
+          <section>
+            <h2>Resources for C++ novices</h2>
+            <table style="border: 0px solid #CCC; border-collapse: collapse;"><tr>
+              <td style="border:none">
+                <img class="fragment plain" src="images/tour.jpg" width="76%"/>
+              </td>
+              <td style="border:none">
+                <img class="plain" src="images/PPP2frontNback.jpg" width="80%"/>
+              </td>
+            </tr></table>
+          </section>
+          <section>
+            <h2>Advanced resources 1</h2>
+            <table style="border: 0px solid #CCC; border-collapse: collapse;">
+              <tr>
+                <td style="border:none"><img class="plain" src="images/daveed.jpg" width="100%"/></td>
+                <td style="border:none"><img class="plain" src="images/stdlibnj.jpg" width="77%"/></td>
+              </tr>
+            </table>
+          </section>
+          <section>
+            <h2>Advanced resources 2</h2>
+            <table style="border: 0px solid #CCC; border-collapse: collapse;">
+              <tr>
+                <td style="border:none"><img class="plain" src="images/4thEnglish.jpg" width="100%"/></td>
+                <td style="border:none"><img class="plain" src="images/cppconcurrency.jpg" width="92%"/></td>
+              </tr>
+            </table>
+          </section>
+          <section>
+            <h2>Teacher-essential resources</h2>
+            <table style="border: 0px solid #CCC; border-collapse: collapse;">
+              <tr>
+                <td style="border:none"><img class="plain" src="images/dne.jpg" width="76%"/></td>
+                <td style="border:none"><img class="plain" src="images/eop.jpg" width="100%"/></td>
+              </tr>
+            </table>
+          </section>
+          <section>
+            <h2>Teacher-only resource</h2>
+            <img class="plain" src="images/cppstd.png" width="80%"/>
+          </section>
+          <section>
+            <h2>Style Guides</h2>
+            <img class="plain" src="images/ccg.jpg" width="100%"/>
+          </section>
+          <section>
+            <h2>Online resources</h2>
+            <ul>
+              <li><a href="en.cppreference.com">C++ Reference</a></li>
+              <li><a href="godbolt.org">Compiler Explorer</a></li>
+              <li><a href="wandbox.org">Wandbox</a></li>
+            </ul>
+          </section>
 
-            <section>
-               <section>
-                  <h1>What is C++?</h1>
-               </section>
+          <!-- Summary -->
+          <section>
+            <h2>Learning and teaching resources</h2>
+            <ul>
+              <li class="fragment" data-fragment-index="5">Resources for C++ novices</li>
+              <li class="fragment" data-fragment-index="4">Resources for advanced classes</li>
+              <li class="fragment" data-fragment-index="3">Resources for teachers</li>
+              <li class="fragment" data-fragment-index="2">C++ Standard for fact-checking</li>
+              <li class="fragment" data-fragment-index="1">C++ Core Guidelines as a style guide</li>
+              <li>Online resources</li>
+            </ul>
+          </section>
+          <section class="open">
+            <h2>Learning and teaching resources</h2>
+            <ul>
+              <li>Resources for C++ novices</li>
+              <li>Resources for advanced classes</li>
+              <li>Resources for teachers</li>
+              <li>C++ Standard for fact-checking</li>
+              <li>C++ Core Guidelines as a style guide</li>
+              <li>Online resources</li>
+            </ul>
+          </section>
+          <section class="close">
+            <h2>Learning and teaching resources</h2>
+            <ul>
+              <li>Resources for C++ novices</li>
+              <li>Resources for advanced classes</li>
+              <li>Resources for teachers</li>
+              <li>C++ Standard for fact-checking</li>
+              <li>C++ Core Guidelines as a style guide</li>
+              <li>Online resources</li>
+            </ul>
+          </section>
+        </section>
+        <!-- Tools -->
+        <section data-transition="slide">
+          <section><h1>Tooling</h1></section>
+          <section>
+            <h2>Turbo C++</h2>
+            Any course that uses Turbo C++ does a great job <b class="fragment blink"><u>not</u></b>
+            teaching C++
+          </section>
+          <section>
+            <h2>Compilers</h2>
+            Pick <i>at least</i> one of
+            <ul>
+              <li>GCC 7+</li>
+              <li>Clang 5+</li>
+            </ul>
+          </section>
+          <section>
+            <h2>C++ International Standard</h2>
+            <ul>
+              <li><span class="fragment strike highlight-red">C++98 and C++03</span></li>
+              <li><span class="fragment highlight-red">C++11</span></li>
+              <li><span class="fragment highlight-green">C++14</span></li>
+              <li><span class="fragment highlight-green">C++17</span></li>
+              <li><span class="fragment highlight-yellow">C++next</span></li>
+            </ul>
+          </section>
+          <section>
+            <h2>Technical Specifications</h2>
+            <ul>
+              <li>A beta branch for a C++ feature</li>
+              <li>10 published (or pending official publication) so far</li>
+              <li class="fragment">Concepts TS + Ranges TS (novice-friendly)</li>
+              <li class="fragment">Coroutines TS + range-v3 (call for research)</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Tools</h2>
+            <ul>
+              <li>Debuggers</li>
+              <li class="fragment">Profilers</li>
+              <li class="fragment">Linters (clang-tidy)</li>
+              <li class="fragment">Version control (Git + GitHub)</li>
+              <li class="fragment">Build systems (CMake)</li>
+              <li class="fragment">Continuous Integration (TravisCI on GitHub)</li>
+            </ul>
+          </section>
 
-               <section>
-                  <h1>C++ is 'C with Classes'</h1>
-                  <aside class="notes">
-                     <ul>
-                        <li>C came first!</li>
-                        <li>Therefore, C++ is C with Classes!</li>
-                        <li>We much teach C first!</li>
-                     </ul>
-                  </aside>
-               </section>
-               <section data-background="images/uk.png">
-                  <aside class="notes">
-                     <ul>
-                        <li>Who in the room speaks English?</li>
-                     </ul>
-                  </aside>
-               </section>
-               <section data-background="images/de.svg">
-                  <aside class="notes">
-                     <ul>
-                        <li>Who in the room speaks English?</li>
-                        <li>How many of you learnt German before English, solely to learn English?</li>
-                     </ul>
-                  </aside>
-               </section>
-
-               <section>
-                  <h2>C++ is 'Java with Explicit Memory Management'</h2>
-               </section>
-
-               <section data-transition="fade-out">
-                  <h3>C++ is a high-level general-purpose multi-paradigm programming language</h3>
-               </section>
-
-               <section data-transition="fade-in">
-                  <h2>C++ is a programming language</h2>
-                  <h3 class="fragment fade-in">that offers the right abstractions at the right times</h3>
-               </section>
-
-               <section class="open" data-transition="fade-out">
-                  <h2>What is C++?</h2>
-                  <ul>
-                     <li class="fragment" data-fragment-index="4"><s>C with Classes</s></li>
-                     <li class="fragment" data-fragment-index="3"><s>Low-level Java</s></li>
-                     <li class="fragment" data-fragment-index="2">General-purpose, high-level, multi-paradigm programming language</li>
-                     <li class="fragment" data-fragment-index="1">A programming language that offers the abstractions at the right time</li>
-                  </ul>
-               </section>
-               <section class="close" data-transition="fade-in">
-                     <h2>What is C++?</h2>
-                     <ul>
-                        <li><s>C with Classes</s></li>
-                        <li><s>Low-level Java</s></li>
-                        <li>General-purpose, high-level, multi-paradigm programming language</li>
-                        <li>A programming language that offers the abstractions at the right time</li>
-                     </ul>
-                  </section>
-            </section>
-
-            <section>
-               <section>
-                  <h1>C++ Resources</h1>
-               </section>
-
-               <section>
-                  <h2>Books</h2>
-                  <ul>
-                     <li class="fragment"><a href="https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list">The Definitive C++ Book Guide and List</a>
-                     <p class="fragment"><q>...there are very many very bad C++ books out there.
-                     And we are not talking about bad style, but things like
-                     <span style="color: #ff0000;">sporting glaringly obvious factual errors</span>
-                     and <span style="color: #ff0000;">promoting abysmally bad programming
-                     styles</span>.</q></p></li>
-                  </ul>
-               </section>
-
-               <section>
-                  <img class="plain" src="images/tour.jpg" width="50%" />
-               </section>
-
-               <section>
-                  <table><tr>
-                     <td><img class="plain" src="images/cpp-primer.jpg" width="80%"/></td>
-                     <td><img class="plain" src="images/PPP2frontNback.jpg" width="94%"/></td>
-                  <tr></table>
-               </section>
-
-               <section>
-                  <table><tr>
-                     <td><img class="plain" src="images/dne.jpg" width="76%"/></td>
-                     <td><img class="plain" src="images/eop.jpg"/></td>
-                  </tr></table>
-
-                  <aside class="notes">
-                     <ul>
-                        <li>Students are devilishly clever</li>
-                        <li>
-                           Try to understand the philosophy and history of C++ to explain <i>why</i>
-                           things are the way they are.
-                        </li>
-                        <li>
-                            Try to understand the <i>theory</i> behind the Standard Library for the
-                            same reasons
-                         </li>
-                     </ul>
-                  </aside>
-               </section>
-
-               <section>
-                  <img class="plain" src="images/cppstd.png" width="80%"/>
-               </section>
-
-               <section>
-                  <h2>Style Guides</h2>
-                  <aside class="notes">
-                     <ul>
-                        <li>Any style guide that is unambiguously restrictive is a poor guide.</li>
-                        <li>
-                           The C++ Core Guidelines recommend behaviour for the general-case, but
-                           don't outlaw anything, and especially not for arbitrary reasons.
-                        </li>
-                     </ul>
-                  </aside>
-               </section>
-
-               <section>
-                  <h2>Online resources</h2>
-               </section>
-
-               <section class="pre-open" data-transition="fade-out">
-                  <h2>Teaching and Learning Resources</h2>
-                  <ul>
-                     <li class="fragment" data-fragment-index="4">Resources for students</li>
-                     <li class="fragment" data-fragment-index="3">Resources for teachers</li>
-                     <li class="fragment" data-fragment-index="2">C++ Standard for Fact Checking<sup style="font-size: 25px;">TM</sup></li>
-                     <li class="fragment" data-fragment-index="1">C++ Core Guidelines as a style guide</li>
-                     <li class="fragment" data-fragment-index="0">Online resources</li>
-                  </ul>
-               </section>
-               <section class="open" data-transition="fade-in fade-out">
-                  <h2>Teaching and Learning Resources</h2>
-                  <ul>
-                     <li>Resources for students</li>
-                     <li>Resources for teachers</li>
-                     <li>C++ Standard for Fact Checking<sup style="font-size: 25px;">TM</sup></li>
-                     <li>C++ Core Guidelines as a style guide</li>
-                     <li>Online resources</li>
-                  </ul>
-               </section>
-               <section class="close" data-transition="fade-in">
-                     <h2>Teaching and Learning Resources</h2>
-                     <ul>
-                        <li>Resources for students</li>
-                        <li>Resources for teachers</li>
-                        <li>C++ Standard for Fact Checking<sup style="font-size: 25px;">TM</sup></li>
-                        <li>C++ Core Guidelines as a style guide</li>
-                        <li>Online resources</li>
-                     </ul>
-                  </section>
-            </section>
-
-            <section>
-               <section><h1>Tools</h1></section>
-               <section>
-                  <h2>Which C++ Standard?</h2>
-                  <ul>
-                     <li><span class="fragment strike highlight-red">C++98/C++03</span></li>
-                     <li><span class="fragment highlight-red">C++11</span></li>
-                     <li><span class="fragment highlight-green">C++14</span></li>
-                     <li><span class="fragment highlight-green">C++17</span></li>
-                     <li><span class="fragment highlight-yellow">C++next</span></li>
-                  </ul>
-                  <aside class="notes">
-                     <ul>
-                        <li>C++98 is old, and should not be taught (except in very particular circumstances)</li>
-                        <li>C++11 has been succeeded by both C++14 and C++17, and is starting to age</li>
-                        <li>C++14 is a good starting point until Q4 2018</li>
-                        <li>C++17 is the best choice, as of March, 2017</li>
-                        <li>C++next is only a good choice when it has been all but ratified (like C++17 at present)</li>
-                     </ul>
-                  </aside>
-               </section>
-
-               <section>
-                  <h2>Technical Specifications</h2>
-                  <ol>
-                     <li class="fragment" data-fragment-index="0">File System</li>
-                     <li class="fragment" data-fragment-index="1">Parallelism</li>
-                     <li class="fragment" data-fragment-index="2">Transactional Memory</li>
-                     <li class="fragment" data-fragment-index="3">Library Fundamentals</li>
-                     <li class="fragment" data-fragment-index="4"><span class="fragment highlight-green" data-fragment-index="11">Concepts</span></li>
-                     <li class="fragment" data-fragment-index="5">Concurrency</li>
-                     <li class="fragment" data-fragment-index="6">Library Fundamentals, Version 2</li>
-                     <li class="fragment" data-fragment-index="7"><span class="fragment highlight-green" data-fragment-index="11">Ranges</span> (ratification pending)</li>
-                     <li class="fragment" data-fragment-index="8">Networking (ratification pending)</li>
-                     <li class="fragment" data-fragment-index="9">Coroutines (ratification pending)</li>
-                     <li class="fragment" data-fragment-index="10">Modules (PDTS)</li>
-                  </ol>
-
-                  <aside class="notes">
-                     <ul>
-                        <li>So many! Which to choose?</li>
-                        <li>Choose ones that will improve learning and programming experience</li>
-                        <li>I am researching the effectiveness of teaching Concepts and Ranges (so far, so good)</li>
-                     </ul>
-                  </aside>
-               </section>
-
-               <section>
-                  <h2>Compilers</h2>
-                  Any course that uses Turbo C++ does a great job <b class="fragment blink"><u>not</u></b>
-                  teaching C++
-
-                  <aside class="notes">
-                     <ul>
-                        <li>Insert minor rant about how courses that use Turbo C++ don't teach C++ at all</li>
-                     </ul>
-                  </aside>
-               </section>
-
-               <section>
-                  <h2>Compilers</h2>
-                  <p>Pick <i>at least</i> one of</p>
-                  <ul>
-                     <li>GCC 6+</li>
-                     <li>Clang 3.9+</li>
-                     <li>Visual C++ 2015 (Update 3)+</li>
-                  </ul>
-               </section>
-               <section><h2>Profilers</h2></section>
-               <section><h2>Revision control</h2></section>
-               <section><h2>Build systems</h2></section>
-               <section data-transition="fade-out">
-                  <h2>Tools</h2>
-                  <ul>
-                     <li class="fragment" data-fragment-index="6">Which Standard?</li>
-                     <li class="fragment" data-fragment-index="5">Which TSes?</li>
-                     <li class="fragment" data-fragment-index="4">Which compiler? (hint: not Turbo C++)</li>
-                     <li class="fragment" data-fragment-index="3">Which profiler?</li>
-                     <li class="fragment" data-fragment-index="2">Revision control</li>
-                     <li class="fragment" data-fragment-index="1">Which build system?</li>
-                  </ul>
-               </section>
-               <section class="open" data-transition="fade-in">
-                  <h2>Tools</h2>
-                  <ul>
-                     <li>Which Standard?</li>
-                     <li>Which TSes?</li>
-                     <li>Which compiler? (hint: not Turbo C++)</li>
-                     <li>Which profiler?</li>
-                     <li>Revision control</li>
-                     <li>Which build system?</li>
-                  </ul>
-               </section>
-               <section class="close" data-transition="fade-in">
-                  <h2>Tools</h2>
-                  <ul>
-                     <li>Which Standard?</li>
-                     <li>Which TSes?</li>
-                     <li>Which compiler? (hint: not Turbo C++)</li>
-                     <li>Which profiler?</li>
-                     <li>Revision control</li>
-                     <li>Which build system?</li>
-                  </ul>
-               </section>
-            </section>
-
-            <section>
-               <section><h1>Content</h1></section>
-               <section>
-                  Let's talk about auto...
-
-                  <aside class="notes">
-                     <ul>
-                        <li>Recall Herb Sutter's talk from 2014</li>
-                        <li>Recall magic numbers</li>
-                        <li>Think of explicit types as 'magic types'</li>
-                     </ul>
-                  </aside>
-               </section>
-               <section><h2>The Standard (Continuous) Library</h2></section>
-               <section data-background-color="#ffff88">
-                  <h2>Parallel Programming</h2>
-                  <img class="plain" src="images/codeplay.png" width="70%"/>
-                  <img class="plain" src="images/sycl.svg" width="60%"/>
-               </section>
-               <section data-transition="fade-out">
-                  <h1>Undefined behaviour</h1>
-                  <span class="fragment">any behaviour for which the Standard can't reason about:</span>
-                  <span class="fragment">literally anything can happen at compile-time,</span>
-                  <span class="fragment">and hence run-time</span>
-               </section>
-               <section class="open" data-transition="fade-in">
-                  <h2>Spot the problem</h2>
-                  <table>
-                     <tr>
-                        <td><code class="cpp">i = ++i</code></td>
-                        <td><code class="cpp">i = i++</code></td>
-                     </tr>
-                     <tr>
-                        <td><code class="cpp">++i = i</code></td>
-                        <td><code class="cpp">j = i + ++i</code></td>
-                     </tr>
-                     <tr>
-                        <td><code class="cpp">o &lt;&lt; (++i + ++i)</code></td>
-                        <td><code class="cpp">o &lt;&lt; ++i &lt;&lt; i++</code></td>
-                     </tr>
-                  </table>
-               </section>
-
-               <section data-transition="fade-out"><h2>Myths</h2></section>
-               <section class="open" data-transiiton="fade-in">
-                  <h2>Spot the problem 2</h2>
-                  <table>
-                     <tr>
-                        <td>
+          <!-- Summary -->
+          <section>
+            <h2>Tooling</h2>
+            <ul>
+              <li class="fragment" data-fragment-index="3">Compilers (hint: not Turbo C++)</li>
+              <li class="fragment" data-fragment-index="2">C++ International Standard</li>
+              <li class="fragment" data-fragment-index="1">Technical Specifications</li>
+              <li>Tools</li>
+            </ul>
+          </section>
+          <section class="open">
+            <h2>Tooling</h2>
+            <ul>
+              <li>Compilers (hint: not Turbo C++)</li>
+              <li>C++ International Standard</li>
+              <li>Technical Specifications</li>
+              <li>Tools</li>
+            </ul>
+          </section>
+          <section class="close">
+            <h2>Tooling</h2>
+            <ul>
+              <li>Compilers (hint: not Turbo C++)</li>
+              <li>C++ International Standard</li>
+              <li>Technical Specifications</li>
+              <li>Tools</li>
+            </ul>
+          </section>
+        </section>
+        <!-- What to address -->
+        <section>
+          <section><h1>Content to address</h1></section>
+          <section>
+            <h2><code>auto</code></h2>
+            <ul>
+              <li>Code against interfaces</li>
+              <li>Don't code against implementations</li>
+            </ul>
 <pre><code class="cpp">#include &lt;iostream&gt;
+#include &lt;string_view&gt;
 
+int main()
+{
+   constexpr auto i = 0; // yes, auto, not int
+
+   using namespace std::string_view_literals;
+   const auto hello = "Hello, world!\n"sv;
+
+   std::cout &lt;&lt; i &lt;&lt; '\n' &lt;&lt; hello;
+}
+</code></pre>
+          </section>
+          <section>
+            <h2>Technical terms</h2>
+            <ul>
+              <li>Objects</li>
+              <li class="fragment">Base class and derived class</li>
+              <li class="fragment">Member function and function</li>
+              <li class="fragment">Implementation-defined behavior</li>
+              <li class="fragment">Unspecified behavior</li>
+              <li class="fragment">Undefined behavior</li>
+            </ul>
+          </section>
+          <section>
+            <h2>The Standard (continuous) Library</h2>
+            <table style="border: 0px solid #CCC; border-collapse: collapse;">
+              <tr><td style="border: none;">
+<pre><code class="cpp">auto v = make_some_vector();
+for (auto&amp; i : v) {
+   for (auto&amp; j : v) {
+      if (j &lt; i) {
+         using std::swap;
+         swap(i, j);
+      }
+   }
+}</code></pre>
+            </td><td class="fragment" data-fragment-index="1" style="border: none;">
+<pre><code class="cpp">auto v = make_some_vector();
+std::stable_sort(begin(v), end(v));
+<span class="fragment" data-fragment-index="2">// ranges::stable_sort(v);</span>
+</code></pre>
+              </td></tr>
+              <tr><td style="border: none;">
+<pre><code class="cpp">auto v = make_some_vector();
+auto n = 0;
+for (const auto&amp; i : v) {
+   if (i == foo) {
+      ++n;
+   }
+}
+// use of n here...
+</code></pre>
+              </td><td class="fragment" data-fragment-index="1" style="border: none;">
+<pre><code class="cpp">auto v = make_some_vector();
+const auto n = std::count(begin(v), end(v), foo);
+<span class="fragment" data-fragment-index="2">// ranges::count(v);</span>
+</code></pre>
+              </td></tr>
+            </table>
+          </section>
+          <section data-background-color="#ffff88">
+            <h2>Parallel Programming</h2>
+            <img class="plain" src="images/codeplay.png" width="70%"/>
+            <img class="plain" src="images/sycl.svg" width="60%"/>
+          </section>
+          <section><h2>Graphics</h2></section>
+          <section><h2>Generic programming</h2></section>
+        </section>
+        <!-- What to avoid -->
+        <section data-transition="slide">
+          <section><h1>Content to avoid</h1></section>
+          <section><h2>C/C++</h2></section>
+          <section>
+            <h2>Spot the problem 1</h2>
+<pre><code class="cpp">int main()
+{
+   auto i = 0;
+   auto j = ++i + i++;
+   return j++ + ++j;
+}
+</code></pre>
+          </section>
+          <section>
+            <h2>Spot the problem 2</h2>
+            <table>
+              <tr><td>
+<pre><code class="cpp">#include &lt;iostream&gt;
+  
 int main()
 {
    std::cout &lt;&lt; "Hello, world!" &lt;&lt; std::endl;
    return 0;
 }
 </code></pre>
-                        </td>
-                        <td>
+              </td>
+              <td>
 <pre><code class="cpp">#include &lt;iostream&gt;
 
 int main()
 {
    std::cout &lt;&lt; "Hello, world!\n";
 }
+
 </code></pre>
-                        </td>
-                     </tr>
-                  </table>
-               </section>
-               <section class="open" data-transition="fade-in">
-                  <h2>Choose <code>C</code></h2>
-<pre><code class="cpp">template &lt;template &lt;typename...&gt; typename C, typename T&gt;
-auto sort(const std::vector&lt;T&gt;&amp; add)
+              </td></tr>
+            </table>
+          </section>
+          <section>
+            <h2>Spot the problem 3</h2>
+            <table style="position: relative; left:-150px;">
+              <tr><td>
+<pre><code class="cpp">int main()
 {
-   auto c = C&lt;T&gt;{};
-   for (const auto&amp; i : add)
-      c.emplace(ranges::find_if(c, [&amp;i](const auto&amp; x) {
-         return x &lt; i; }, i);
+   auto in = std::ifstream{"hello.txt"};
+   if (not in.is_open()) {
+      std::cerr &lt;&lt; "Couldn't open hello.txt\n";
+      return 1;
+   }
+
+   while (not in.eof()) {
+      auto i = 0;
+      in &gt;&gt; i;
+      std::cout &lt;&lt; i &lt;&lt; '\n';
+   }
+
+   in.close();
+}
+</code></pre>
+              </td>
+              <td class="fragment">
+<pre><code class="cpp">int main()
+{
+   if (auto in = std::ifstream{"hello.txt"}) {
+      for (auto i = 0; in &gt;&gt; i; )
+         std::cout &lt;&lt; i &lt;&lt; '\n';
+
+      if (in.bad())
+         std::cerr &lt;&lt; "Non-recoverable device error.\n";
+      else if (in.fail() &amp;&amp; !in.eof())
+         std::cerr &lt;&lt; "Non-integral data read.\n";
+   }
+   else {
+     std::cerr &lt;&lt; "Couldn't open hello.txt\n";
+     return 1;
+   }
+}
+</code></pre>
+                </td></tr>
+              </table>
+            </section>
+            <section>
+              <h2>Spot the problem 4</h2>
+<pre><code class="cpp">#include &lt;limits&gt;
+
+int main()
+{
+   auto i = std::numeric_limits&lt;int&gt;::max();
+   return --i;
+}
+</code></pre>
+            </section>
+            <section>
+              <h2>Spot the problem 5</h2>
+              <table>
+                <tr><td>
+<pre><code class="cpp">/**
+ * @brief Returns a non-negative integer
+ * @param i Input parameter.
+ * @returns i if i &gt;= 0; -i otherwise.
+ */
+unsigned int abs(int i)
+{
+   return i &lt; 0 ? -i : i;
+}
+</code></pre>
+                </td>
+                <td class="fragment">
+<pre><code class="cpp">/**
+ * @brief Returns a non-negative integer
+ * @param i Input parameter.
+ * @returns i if i &gt;= 0; -i otherwise.
+ */
+int abs(int i)
+{
+   return i &lt; 0 ? -i : i;
+}
+</code></pre>
+                </td></tr>
+              </table>
+            </section>
+            <section><h2>Template code bloat</h2></section>
+            <section>
+              <h2>Choose the correct container for <code>C</code></h2>
+<pre style="width:107%;"><code class="cpp">template &lt;template &lt;typename...&gt; typename C, InputIterator I, Sentinel&lt;I&gt; S&gt;
+auto insertion_sort(I first, S last)
+{
+   auto c = C&lt;value_type_t&lt;I&gt;&gt;{};
+   for (; first != last; ++first)
+      c.emplace(ranges::find_if(c, [&amp;first](const auto&amp; x) { return x &lt; *first; }, *first);
 
    return c;
 }
 </code></pre>
-                  <ol>
-                     <li><code>std::forward_list</code></li>
-                     <li><code>std::list</code></li>
-                     <li><code>std::deque</code></li>
-                     <li><code>std::vector</code></li>
-                  </ol>
-               </section>
-               <section><h2>Template code bloat</h2></section>
-               <section data-transition="fade-out">
-                  <h2>Content</h2>
-                  <ul>
-                     <li class="fragment" data-fragment-index="6">Type deduction</li>
-                     <li class="fragment" data-fragment-index="5">The Standard Library</li>
-                     <li class="fragment" data-fragment-index="4">Parallel programming</li>
-                     <li class="fragment" data-fragment-index="3">Undefined behaviour</li>
-                     <li class="fragment" data-fragment-index="2">C++ Myths</li>
-                     <li class="fragment" data-fragment-index="1">Template code bloat</li>
-                  </ul>
-               </section>
-               <section class="open" data-transition="fade-in fade-out">
-                  <h2>Content</h2>
-                  <ul>
-                     <li>Type deduction</li>
-                     <li>The Standard Library</li>
-                     <li>Parallel programming</li>
-                     <li>Undefined behaviour</li>
-                     <li>C++ Myths</li>
-                     <li>Template code bloat</li>
-                  </ul>
-               </section>
-               <section class="close" data-transition="fade-in fade-out">
-                  <h2>Content</h2>
-                  <ul>
-                     <li>Type deduction</li>
-                     <li>The Standard Library</li>
-                     <li>Parallel programming</li>
-                     <li>Undefined behaviour</li>
-                     <li>C++ Myths</li>
-                     <li>Template code bloat</li>
-                  </ul>
-               </section>
+              <ol>
+                <li><code>std::forward_list</code> <small>(singly linked-list)</small></li>
+                <li><code>std::list</code> <small>(doubly-linked list)</small></li>
+                <li><code>std::deque</code></li>
+                <li><code>std::multiset</code></li>
+                <li><span class="fragment highlight-green"><code>std::vector</code></span></li>
+              </ol>
             </section>
 
+            <!-- Summary -->
             <section>
-               <section>
-                  <h1>Learning C++ isn't Difficult</h1>
-                  <h2 class="fragment">Teaching is the Trick</h2>
-               </section>
-               <section><h1>Questions?</h1></section>
+              <h2>Content to address and content to avoid</h2>
+              <ul>
+                <li class="fragment" data-fragment-index="7"><span style="color:#17ff2e;">Type deduction</span></li>
+                <li class="fragment" data-fragment-index="6"><span style="color:#ffcc00;">Terminology</span></li>
+                <li class="fragment" data-fragment-index="5"><span style="color:#17ff2e;">The Standard Library</span></li>
+                <li class="fragment" data-fragment-index="4"><span style="color:#17ff2e;">Parallel programming</span></li>
+                <li class="fragment" data-fragment-index="3"><span style="color:#77ff2e;">Graphics</span></li>
+                <li class="fragment" data-fragment-index="2"><span style="color:#17ff2e;">Generic programming</span></li>
+                <li class="fragment" data-fragment-index="1"><span style="color:#ff2c2d;">Don't refer to either C or C++ as "C/C++"</span></li>
+                <li><span style="color:#ff2c2d;">Don't teach popular myths</span></li>
+              </ul>
             </section>
-         </div>
-
+        </section>
+        <section>
+          <section>
+            <h1>Learning C++ isn't Difficult</h1>
+            <h2 class="fragment">Teaching is the Trick</h2>
+          </section>
+          <section>
+            <h1>Questions?</h1>
+          </section>
+        </section>
       </div>
+    </div>
 
-      <script src="lib/js/head.min.js"></script>
-      <script src="js/reveal.js"></script>
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
 
-      <script>
+    <script>
+       // More info https://github.com/hakimel/reveal.js#configuration
+       Reveal.initialize({
+          controls: true,
+          progress: true,
+          history: true,
+          center: true,
+          slideNumber: true,
 
-         // More info https://github.com/hakimel/reveal.js#configuration
-         Reveal.initialize({
-            controls: true,
-            progress: true,
-            history: true,
-            center: true,
+          transition: 'none', // none/fade/slide/convex/concave/zoom
+          backgroundTransition: 'none',
 
-            transition: 'slide', // none/fade/slide/convex/concave/zoom
-
-            // More info https://github.com/hakimel/reveal.js#dependencies
-            dependencies: [
-               { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-               { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-               { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-               { src: 'plugin/highlight/highlight.pack.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-               { src: 'plugin/zoom-js/zoom.js', async: true },
-               { src: 'plugin/notes/notes.js', async: true }
-            ]
-         });
-
-      </script>
-
-   </body>
+          // More info https://github.com/hakimel/reveal.js#dependencies
+          dependencies: [
+             { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+             { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+             { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+             { src: 'plugin/highlight/highlight.pack.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+             { src: 'plugin/zoom-js/zoom.js', async: true },
+             { src: 'plugin/notes/notes.js', async: true }
+          ]
+       });
+    </script>
+  </body>
 </html>
