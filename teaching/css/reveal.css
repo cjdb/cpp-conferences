@@ -1400,7 +1400,6 @@ body {
 
 .reveal .open {
    background-color: #4d7e65;
-   transition: fade-in;
 }
 
 .reveal .close {

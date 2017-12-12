@@ -376,10 +376,10 @@ body {
 }
 
 .reveal section img.codeplay-brand { /*cjdb*/
-   width: 15%;
+   width: 20%;
    position: relative;
-   top: 37px;
-   left: -149px;
+   top: 25px;
+   /*left: 350px;*/
 }
 
 .reveal img.unsw-brand {
